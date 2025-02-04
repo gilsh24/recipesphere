@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">recipesphere</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_all_recipes">Search</string>
+    <string name="title_add_recipe">Add Recipe</string>
+    <string name="title_profile">Profile</string>
+    <string name="title_my_recipes">My Recipes</string>
 </resources>

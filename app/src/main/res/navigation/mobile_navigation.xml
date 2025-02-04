@@ -3,23 +3,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_all_recipes">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.example.recipesphere.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/navigation_all_recipes"
+        android:name="com.example.recipesphere.ui.browserecipes.BrowseRecipesFragment"
+        android:label="@string/title_all_recipes"
+        tools:layout="@layout/fragment_browse_recipes" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.example.recipesphere.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_add_recipe"
+        android:name="com.example.recipesphere.ui.addrecipe.AddRecipeFragment"
+        android:label="@string/title_add_recipe"
+        tools:layout="@layout/fragment_add_recipe" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.example.recipesphere.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_my_recipes"
+        android:name="com.example.recipesphere.ui.myrecipes.MyRecipesFragment"
+        android:label="@string/title_my_recipes"
+        tools:layout="@layout/fragment_browse_recipes" />
+
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.example.recipesphere.ui.profile.ProfileFragment"
+        android:label="@string/title_profile"
+        tools:layout="@layout/fragment_profile" />
+
 </navigation>
