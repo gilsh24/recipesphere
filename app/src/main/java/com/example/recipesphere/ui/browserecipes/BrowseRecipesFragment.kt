@@ -1,4 +1,4 @@
-package com.example.recipesphere.ui.allrecipes
+package com.example.recipesphere.ui.browserecipes
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,13 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.example.recipesphere.databinding.FragmentAllRecipesBinding
+import com.example.recipesphere.databinding.FragmentBrowseRecipesBinding
 
-class AllRecipesFragment : Fragment() {
+class BrowseRecipesFragment : Fragment() {
 
-    private var _binding: FragmentAllRecipesBinding? = null
+    private var _binding: FragmentBrowseRecipesBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: AllRecipesViewModel by viewModels()
+    private val viewModel: BrowseRecipesViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,8 +22,8 @@ class AllRecipesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentAllRecipesBinding.inflate(inflater, container, false)
-        binding.text2.text = "All Recipes"
+        _binding = FragmentBrowseRecipesBinding.inflate(inflater, container, false)
+        binding.text2.text = "Browse Recipes"
         return binding.root
     }
 

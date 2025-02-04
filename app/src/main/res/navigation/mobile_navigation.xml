@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/navigation_all_recipes"
-        android:name="com.example.recipesphere.ui.allrecipes.AllRecipesFragment"
+        android:name="com.example.recipesphere.ui.browserecipes.BrowseRecipesFragment"
         android:label="@string/title_all_recipes"
-        tools:layout="@layout/fragment_all_recipes" />
+        tools:layout="@layout/fragment_browse_recipes" />
 
     <fragment
         android:id="@+id/navigation_add_recipe"
@@ -21,7 +21,7 @@
         android:id="@+id/navigation_my_recipes"
         android:name="com.example.recipesphere.ui.myrecipes.MyRecipesFragment"
         android:label="@string/title_my_recipes"
-        tools:layout="@layout/fragment_all_recipes" />
+        tools:layout="@layout/fragment_browse_recipes" />
 
     <fragment
         android:id="@+id/navigation_profile"
