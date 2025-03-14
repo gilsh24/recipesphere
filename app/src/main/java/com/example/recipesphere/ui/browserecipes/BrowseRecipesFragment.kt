@@ -23,7 +23,7 @@ class BrowseRecipesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentBrowseRecipesBinding.inflate(inflater, container, false)
-        binding.text2.text = "Browse Recipes"
+//        binding.text2.text = "Browse Recipes"
         return binding.root
     }
 
