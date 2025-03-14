@@ -1,23 +1,14 @@
 package com.example.recipesphere.model
 
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.example.recipesphere.base.Converters
-
-//data class Recipe(
-//    val userName: String,
-//    val userAge: Int,
-//    val title: String,
-//    val description: String,
-//    val ingredients: List<String>, // or Array<String>
-//    val time: String,
-//    val likes: Int,
-//    val imageResId: String
-//)
-
+import kotlinx.parcelize.Parcelize
 
 @Entity
+@Parcelize
 data class Recipe(
     @PrimaryKey val id: String,
     val userName: String,
@@ -30,4 +21,4 @@ data class Recipe(
     val likes: Int,
     val imageResId: Int  // You can also use URLs if needed
 //    val imageResId: Int  // You can also use URLs if needed
-)
+) : Parcelable

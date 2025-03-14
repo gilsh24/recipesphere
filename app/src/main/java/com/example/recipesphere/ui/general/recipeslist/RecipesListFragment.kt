@@ -19,6 +19,23 @@ class RecipesListFragment : Fragment() {
     var recipes: List<Recipe>? = null
     private lateinit var adapter: RecipesRecyclerAdapter
 
+    companion object {
+        private const val ARG_RECIPES = "arg_recipes"
+        fun newInstance(recipes: List<Recipe>): RecipesListFragment {
+            val fragment = RecipesListFragment()
+            val args = Bundle().apply {
+                putParcelableArrayList(ARG_RECIPES, ArrayList(recipes))
+            }
+            fragment.arguments = args
+            return fragment
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        recipes = arguments?.getParcelableArrayList<Recipe>(ARG_RECIPES)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -30,8 +47,6 @@ class RecipesListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        recipes = Model.shared.recipes
-
         adapter = RecipesRecyclerAdapter(recipes)
         binding.rvRecipes.layoutManager = LinearLayoutManager(requireContext())
         binding.rvRecipes.adapter = adapter
@@ -42,17 +57,24 @@ class RecipesListFragment : Fragment() {
         _binding = null
     }
 
-    override fun onResume() {
-        super.onResume()
-        getAllRecipes()
+//    override fun onResume() {
+//        super.onResume()
+//        getAllRecipes()
+//    }
+
+//    private fun getAllRecipes() {
+//        Model.shared.getAllRecipes {
+//            recipes = it
+//            Log.i("recipes getAllRecipes", recipes.toString()) // should have title description
+//            adapter.update(recipes)
+//            adapter.notifyDataSetChanged()
+//        }
+//    }
+
+    fun updateRecipes(newRecipes: List<Recipe>) {
+        recipes = newRecipes
+        adapter.update(recipes)
+        adapter.notifyDataSetChanged()
     }
 
-    private fun getAllRecipes() {
-        Model.shared.getAllRecipes {
-            recipes = it
-            Log.i("recipes getAllRecipes", recipes.toString()) // should have title description
-            adapter.update(recipes)
-            adapter.notifyDataSetChanged()
-        }
-    }
 }

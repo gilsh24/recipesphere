@@ -6,7 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.example.recipesphere.R
 import com.example.recipesphere.databinding.FragmentBrowseRecipesBinding
+import com.example.recipesphere.model.Model
+import com.example.recipesphere.ui.general.recipeslist.RecipesListFragment
 
 class BrowseRecipesFragment : Fragment() {
 
@@ -29,6 +32,18 @@ class BrowseRecipesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        Model.shared.getAllRecipes { recipes ->
+            // Create an instance of RecipesListFragment with the recipes
+            val recipesListFragment = RecipesListFragment.newInstance(recipes)
+
+            // Add RecipesListFragment as a child fragment
+            childFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, recipesListFragment)
+                .commit()
+        }
+
+
     }
 
     override fun onDestroyView() {
