@@ -10,12 +10,15 @@ import androidx.lifecycle.ViewModelProvider
 class RegistrationActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegistrationBinding
-    private lateinit var viewModel: RegistrationViewModel
+    private lateinit var viewModel: RegistrationViewModel // Declare as a class property
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegistrationBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Initialize ViewModel using ViewModelProvider:
+        viewModel = ViewModelProvider(this)[RegistrationViewModel::class.java]
 
         binding.registerButton.setOnClickListener {
             val email = binding.emailEditText.text.toString()
