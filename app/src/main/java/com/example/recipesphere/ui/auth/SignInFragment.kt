@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.recipesphere.MainActivity
 import com.example.recipesphere.R
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.example.recipesphere.databinding.FragmentRegisterBinding
 import com.example.recipesphere.databinding.FragmentSigninBinding
 
@@ -45,7 +46,8 @@ class SignInFragment : Fragment(){
         }
 
         view.findViewById<Button>(R.id.goToRegisterButton).setOnClickListener {
-            Navigation.findNavController(view).navigate(R.id.action_signInFragment_to_registerFragment)
+            findNavController().navigate(R.id.action_signInFragment_to_registerFragment)
+//            Navigation.findNavController(it).navigate(R.id.action_signInFragment_to_registerFragment)
         }
 
         authViewModel.loginResult.observe(viewLifecycleOwner) { result ->

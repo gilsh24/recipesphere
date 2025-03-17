@@ -13,9 +13,9 @@ class AuthActivity : AppCompatActivity(){
         setContentView(R.layout.activity_auth)
 
         // Load the RegisterFragment by default
-        if (savedInstanceState == null) {
-            navigateToSignIn()
-        }
+//        if (savedInstanceState == null) {
+//            navigateToSignIn()
+//        }
     }
 
     // Function to load a fragment into the container
