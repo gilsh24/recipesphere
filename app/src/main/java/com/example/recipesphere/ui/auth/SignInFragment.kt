@@ -12,9 +12,14 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.recipesphere.MainActivity
 import com.example.recipesphere.R
+import androidx.navigation.Navigation
+import com.example.recipesphere.databinding.FragmentRegisterBinding
+import com.example.recipesphere.databinding.FragmentSigninBinding
 
 class SignInFragment : Fragment(){
     private lateinit var authViewModel: AuthViewModel
+    private lateinit var binding: FragmentSigninBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +29,8 @@ class SignInFragment : Fragment(){
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_signin, container, false)
+        binding = FragmentSigninBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -36,6 +42,12 @@ class SignInFragment : Fragment(){
             val password = view.findViewById<EditText>(R.id.passwordEditText).text.toString()
 
             authViewModel.loginUser(email, password)
+        }
+
+        view.findViewById<Button>(R.id.goToRegisterButton).setOnClickListener {
+            binding.root.let {
+                Navigation.findNavController(it).navigate(R.id.action_signInFragment_to_registerFragment)
+            }
         }
 
         authViewModel.loginResult.observe(viewLifecycleOwner) { result ->
