@@ -11,12 +11,6 @@
         android:label="@string/title_all_recipes"
         tools:layout="@layout/fragment_browse_recipes" />
 
-<!--    <fragment-->
-<!--        android:id="@+id/navigation_all_recipes"-->
-<!--        android:name="com.example.recipesphere.ui.general.recipeslist.RecipesListFragment"-->
-<!--        android:label="@string/title_all_recipes"-->
-<!--        tools:layout="@layout/fragment_recipes_list" />-->
-
     <fragment
         android:id="@+id/navigation_add_recipe"
         android:name="com.example.recipesphere.ui.addrecipe.AddRecipeFragment"

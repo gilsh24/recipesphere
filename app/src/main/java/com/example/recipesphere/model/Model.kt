@@ -13,7 +13,6 @@ class Model {
     private val database: AppLocalDbRepository = AppLocalDb.database
     private val executer = Executors.newSingleThreadExecutor()
     private var mainHandler = HandlerCompat.createAsync(Looper.getMainLooper())
-//    val recipes: MutableList<Recipe> = ArrayList()
 
     companion object {
         val shared = Model()
@@ -27,14 +26,13 @@ class Model {
                 userName = "User $i",
                 userAge = 20 + i,
                 title = "Recipe $i",
-                description = "This is recipe number $i",
+                difficultyLevel = 3,
                 ingredients = ArrayList(2),
                 time = "${20 + i} minutes",
                 likes = i * 5,
                 imageResId = R.drawable.pancakes
             )
             recipes.add(recipe)
-//            recipes.add(recipe)
         }
         val recipesArray = recipes.toTypedArray()
         executer.execute {
