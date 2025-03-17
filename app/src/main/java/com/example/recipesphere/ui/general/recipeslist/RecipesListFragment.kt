@@ -57,20 +57,6 @@ class RecipesListFragment : Fragment() {
         _binding = null
     }
 
-//    override fun onResume() {
-//        super.onResume()
-//        getAllRecipes()
-//    }
-
-//    private fun getAllRecipes() {
-//        Model.shared.getAllRecipes {
-//            recipes = it
-//            Log.i("recipes getAllRecipes", recipes.toString()) // should have title description
-//            adapter.update(recipes)
-//            adapter.notifyDataSetChanged()
-//        }
-//    }
-
     fun updateRecipes(newRecipes: List<Recipe>) {
         recipes = newRecipes
         adapter.update(recipes)
