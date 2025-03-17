@@ -45,9 +45,7 @@ class SignInFragment : Fragment(){
         }
 
         view.findViewById<Button>(R.id.goToRegisterButton).setOnClickListener {
-            binding.root.let {
-                Navigation.findNavController(it).navigate(R.id.action_signInFragment_to_registerFragment)
-            }
+            Navigation.findNavController(view).navigate(R.id.action_signInFragment_to_registerFragment)
         }
 
         authViewModel.loginResult.observe(viewLifecycleOwner) { result ->

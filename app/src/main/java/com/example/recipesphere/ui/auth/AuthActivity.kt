@@ -14,7 +14,7 @@ class AuthActivity : AppCompatActivity(){
 
         // Load the RegisterFragment by default
         if (savedInstanceState == null) {
-            loadFragment(RegisterFragment())
+            navigateToSignIn()
         }
     }
 

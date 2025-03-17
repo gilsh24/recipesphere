@@ -49,9 +49,7 @@ class RegisterFragment : Fragment(){
         authViewModel.registerResult.observe(viewLifecycleOwner) { result ->
             if (result.isSuccess) {
                 Toast.makeText(requireContext(), "Registration Successful!", Toast.LENGTH_SHORT).show()
-                binding.root.let {
-                    Navigation.findNavController(it).navigate(R.id.action_registerFragment_to_signInFragment)
-                }
+                Navigation.findNavController(view).navigate(R.id.action_registerFragment_to_signInFragment)
             } else {
                 Toast.makeText(requireContext(), "Error: ${result.exceptionOrNull()?.message}", Toast.LENGTH_SHORT).show()
             }
