@@ -9,7 +9,15 @@
         android:id="@+id/navigation_all_recipes"
         android:name="com.example.recipesphere.ui.browserecipes.BrowseRecipesFragment"
         android:label="@string/title_all_recipes"
-        tools:layout="@layout/fragment_browse_recipes" />
+        tools:layout="@layout/fragment_browse_recipes" >
+        <action
+            android:id="@+id/action_navigation_all_recipes_to_singleRecipeFragment"
+            app:destination="@id/singleRecipeFragment">
+            <argument
+                android:name="arg_recipe"
+                app:argType="com.example.recipesphere.model.Recipe" />
+        </action>
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_add_recipe"
@@ -21,7 +29,15 @@
         android:id="@+id/navigation_my_recipes"
         android:name="com.example.recipesphere.ui.myrecipes.MyRecipesFragment"
         android:label="@string/title_my_recipes"
-        tools:layout="@layout/fragment_browse_recipes" />
+        tools:layout="@layout/fragment_browse_recipes">
+        <action
+            android:id="@+id/action_navigation_my_recipes_to_singleRecipeFragment"
+            app:destination="@id/singleRecipeFragment">
+            <argument
+                android:name="arg_recipe"
+                app:argType="com.example.recipesphere.model.Recipe" />
+        </action>
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_profile"
@@ -29,4 +45,12 @@
         android:label="@string/title_profile"
         tools:layout="@layout/fragment_profile" />
 
+    <fragment
+        android:id="@+id/singleRecipeFragment"
+        android:name="com.example.recipesphere.ui.singlerecipe.SingleRecipeFragment"
+        android:label="Recipe Details">
+        <argument
+            android:name="arg_recipe"
+            app:argType="com.example.recipesphere.model.Recipe" />
+    </fragment>
 </navigation>

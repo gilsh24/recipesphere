@@ -7,7 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.recipesphere.R
 import com.example.recipesphere.databinding.FragmentRecipesListBinding
 import com.example.recipesphere.model.Model
 import com.example.recipesphere.model.Recipe
@@ -48,10 +50,12 @@ class RecipesListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         adapter = RecipesRecyclerAdapter(recipes)
-        adapter.listener =  OnItemClickListener {
-            recipe: Recipe? ->
-            recipe.let {
-                val action = RecipesListFragment
+        adapter.listener = object: OnItemClickListener {
+            override fun onItemClick(recipe: Recipe?) {
+                recipe.let {
+
+//                val action =
+                }
             }
         }
         binding.rvRecipes.layoutManager = LinearLayoutManager(requireContext())

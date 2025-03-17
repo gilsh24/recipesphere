@@ -9,9 +9,11 @@ import androidx.fragment.app.viewModels
 import com.example.recipesphere.R
 import com.example.recipesphere.databinding.FragmentBrowseRecipesBinding
 import com.example.recipesphere.model.Model
+import com.example.recipesphere.model.Recipe
+import com.example.recipesphere.ui.general.recipeslist.OnItemClickListener
 import com.example.recipesphere.ui.general.recipeslist.RecipesListFragment
 
-class BrowseRecipesFragment : Fragment() {
+class BrowseRecipesFragment : Fragment(), OnItemClickListener {
 
     private var _binding: FragmentBrowseRecipesBinding? = null
     private val binding get() = _binding!!
@@ -48,5 +50,10 @@ class BrowseRecipesFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onItemClick(recipe: Recipe?) {
+        var action = BrowseRecipesFragment
+        TODO("Not yet implemented")
     }
 }
