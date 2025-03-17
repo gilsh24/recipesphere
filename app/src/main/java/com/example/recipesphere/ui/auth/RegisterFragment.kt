@@ -10,6 +10,9 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.recipesphere.R
+import androidx.navigation.Navigation
+import android.content.Intent
+import com.example.recipesphere.MainActivity
 
 class RegisterFragment : Fragment(){
 
@@ -43,7 +46,7 @@ class RegisterFragment : Fragment(){
         authViewModel.registerResult.observe(viewLifecycleOwner) { result ->
             if (result.isSuccess) {
                 Toast.makeText(requireContext(), "Registration Successful!", Toast.LENGTH_SHORT).show()
-                // Navigate to another screen
+
             } else {
                 Toast.makeText(requireContext(), "Error: ${result.exceptionOrNull()?.message}", Toast.LENGTH_SHORT).show()
             }

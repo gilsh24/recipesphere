@@ -1,5 +1,6 @@
 package com.example.recipesphere.ui.auth
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import com.example.recipesphere.MainActivity
 import com.example.recipesphere.R
 
 class SignInFragment : Fragment(){
@@ -38,8 +40,11 @@ class SignInFragment : Fragment(){
 
         authViewModel.loginResult.observe(viewLifecycleOwner) { result ->
             if (result.isSuccess) {
-                Toast.makeText(requireContext(), "Registration Successful!", Toast.LENGTH_SHORT).show()
-                // Navigate to another screen
+                Toast.makeText(requireContext(), "SignIn Successful!", Toast.LENGTH_SHORT).show()
+                // Navigate to Main activity
+                val intent = Intent(requireContext(), MainActivity::class.java)
+                startActivity(intent)
+                requireActivity().finish()
             } else {
                 Toast.makeText(requireContext(), "Error: ${result.exceptionOrNull()?.message}", Toast.LENGTH_SHORT).show()
             }

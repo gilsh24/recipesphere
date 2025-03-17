@@ -4,8 +4,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.recipesphere.R
-import com.example.recipesphere.ui.auth.RegisterFragment
-import com.example.recipesphere.ui.auth.SignInFragment
 
 
 class AuthActivity : AppCompatActivity(){
