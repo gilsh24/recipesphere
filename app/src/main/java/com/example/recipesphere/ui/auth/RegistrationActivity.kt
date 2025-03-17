@@ -1,11 +1,10 @@
-package com.example.recipesphere.ui.register
+package com.example.recipesphere.ui.auth
 
-import android.content.Intent
+/*import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.recipesphere.databinding.ActivityRegistrationBinding
-import com.example.recipesphere.ui.register.RegistrationViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.recipesphere.MainActivity
 
@@ -49,4 +48,4 @@ class RegistrationActivity : AppCompatActivity() {
             }
         }
     }
-}
+}*/

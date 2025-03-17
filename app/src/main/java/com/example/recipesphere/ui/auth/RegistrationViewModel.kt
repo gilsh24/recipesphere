@@ -1,4 +1,4 @@
-package com.example.recipesphere.ui.register
+package com.example.recipesphere.ui.auth
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
