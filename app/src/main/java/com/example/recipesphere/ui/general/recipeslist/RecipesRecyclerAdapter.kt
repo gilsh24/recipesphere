@@ -9,6 +9,8 @@ import com.example.recipesphere.model.Recipe
 class RecipesRecyclerAdapter(private var recipes: List<Recipe>?) :
     RecyclerView.Adapter<RecipeViewHolder>() {
 
+    var listener: OnItemClickListener? = null
+
     fun update(recipes: List<Recipe>?) {
         this.recipes = recipes;
     }
@@ -21,7 +23,7 @@ class RecipesRecyclerAdapter(private var recipes: List<Recipe>?) :
             parent,
             false
         )
-        return RecipeViewHolder(binding)
+        return RecipeViewHolder(binding, listener)
     }
 
     override fun onBindViewHolder(holder: RecipeViewHolder, position: Int) {

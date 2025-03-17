@@ -48,6 +48,12 @@ class RecipesListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         adapter = RecipesRecyclerAdapter(recipes)
+        adapter.listener =  OnItemClickListener {
+            recipe: Recipe? ->
+            recipe.let {
+                val action = RecipesListFragment
+            }
+        }
         binding.rvRecipes.layoutManager = LinearLayoutManager(requireContext())
         binding.rvRecipes.adapter = adapter
     }

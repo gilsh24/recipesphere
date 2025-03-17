@@ -4,11 +4,23 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.recipesphere.databinding.RecipeListItemBinding
 import com.example.recipesphere.model.Recipe
 
-class RecipeViewHolder(private val binding: RecipeListItemBinding) :
-    RecyclerView.ViewHolder(binding.root) {
+class RecipeViewHolder(
+    private val binding: RecipeListItemBinding,
+    listener: OnItemClickListener?
+    ) : RecyclerView.ViewHolder(binding.root) {
+
+    private var recipe : Recipe? = null
+
+    init {
+        itemView.setOnClickListener {
+            listener?.onItemClick(recipe)
+        }
+    }
+
 
     fun bind(recipe: Recipe?) {
         recipe?.let {
+            this.recipe = recipe
             println("binding recipe: $it")
             binding.imgRecipe.setImageResource(it.imageResId)
             binding.tvNameAge.text = "${recipe.userName}, ${recipe.userAge}"
