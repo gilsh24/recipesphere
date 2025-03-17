@@ -85,6 +85,11 @@ class FirebaseModel {
             .addOnFailureListener { callback(Result.failure(it)) }
     }
 
+    fun isUserSignedIn(): Boolean {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        return currentUser != null
+    }
+
     fun updateUser(uid: String, updates: Map<String, Any>, callback: (Result<Unit>) -> Unit) {
         database.collection("users").document(uid)
             .update(updates)

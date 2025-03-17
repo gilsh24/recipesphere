@@ -21,6 +21,13 @@ class AuthViewModel : ViewModel() {
     private val _updateResult = MutableLiveData<Result<Unit>>()
     val updateResult: LiveData<Result<Unit>> get() = _updateResult
 
+    private val _userSignedIn = MutableLiveData<Boolean>()
+    val userSignedIn: LiveData<Boolean> get() = _userSignedIn
+
+
+    init{
+        _userSignedIn.value = firebaseModel.isUserSignedIn()
+    }
     fun registerUser(email: String, password: String, firstName: String, lastName: String, age: Int) {
         firebaseModel.registerUser(email, password, firstName, lastName, age) { result ->
             _registerResult.postValue(result)
