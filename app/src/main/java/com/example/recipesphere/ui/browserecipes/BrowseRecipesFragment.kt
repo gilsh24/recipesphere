@@ -5,19 +5,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import com.example.recipesphere.R
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.recipesphere.databinding.FragmentBrowseRecipesBinding
 import com.example.recipesphere.model.Model
 import com.example.recipesphere.model.Recipe
 import com.example.recipesphere.ui.general.recipeslist.OnItemClickListener
-import com.example.recipesphere.ui.general.recipeslist.RecipesListFragment
+import com.example.recipesphere.ui.general.recipeslist.RecipesRecyclerAdapter
 
-class BrowseRecipesFragment : Fragment(), OnItemClickListener {
+class BrowseRecipesFragment : Fragment() {
 
     private var _binding: FragmentBrowseRecipesBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: BrowseRecipesViewModel by viewModels()
+    private lateinit var adapter: RecipesRecyclerAdapter
+//    private val viewModel: BrowseRecipesViewModel by viewModels()
+    var recipes: List<Recipe>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,17 +36,18 @@ class BrowseRecipesFragment : Fragment(), OnItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Model.shared.getAllRecipes { recipes ->
-            // Create an instance of RecipesListFragment with the recipes
-            val recipesListFragment = RecipesListFragment.newInstance(recipes)
+        binding.rvRecipes.layoutManager = LinearLayoutManager(requireContext())
+        adapter = RecipesRecyclerAdapter(recipes, isMyRecipe = false)
 
-            // Add RecipesListFragment as a child fragment
-            childFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, recipesListFragment)
-                .commit()
+        adapter.listener = object: OnItemClickListener {
+            override fun onItemClick(recipe: Recipe?) {
+                recipe?.let {
+                    val action = BrowseRecipesFragmentDirections.actionNavigationAllRecipesToSingleRecipeFragment(it)
+                    findNavController().navigate(action)
+                }
+            }
         }
-
-
+        binding.rvRecipes.adapter = adapter
     }
 
     override fun onDestroyView() {
@@ -52,8 +55,21 @@ class BrowseRecipesFragment : Fragment(), OnItemClickListener {
         _binding = null
     }
 
-    override fun onItemClick(recipe: Recipe?) {
-        var action = BrowseRecipesFragment
-        TODO("Not yet implemented")
+    override fun onResume() {
+        super.onResume()
+        getAllRecipes()
     }
+
+    private fun getAllRecipes() {
+//        binding?.progressBar?.visibility = View.VISIBLE
+//        viewModel.refreshAllStudents()
+
+        Model.shared.getAllRecipes {
+            recipes = it
+            adapter.update(it)
+            adapter.notifyDataSetChanged()
+        }
+    }
+
+
 }

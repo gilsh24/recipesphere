@@ -6,7 +6,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.recipesphere.databinding.RecipeListItemBinding
 import com.example.recipesphere.model.Recipe
 
-class RecipesRecyclerAdapter(private var recipes: List<Recipe>?) :
+class RecipesRecyclerAdapter(
+    private var recipes: List<Recipe>?,
+    private val isMyRecipe: Boolean) :
     RecyclerView.Adapter<RecipeViewHolder>() {
 
     var listener: OnItemClickListener? = null
@@ -23,7 +25,7 @@ class RecipesRecyclerAdapter(private var recipes: List<Recipe>?) :
             parent,
             false
         )
-        return RecipeViewHolder(binding, listener)
+        return RecipeViewHolder(binding,isMyRecipe, listener)
     }
 
     override fun onBindViewHolder(holder: RecipeViewHolder, position: Int) {

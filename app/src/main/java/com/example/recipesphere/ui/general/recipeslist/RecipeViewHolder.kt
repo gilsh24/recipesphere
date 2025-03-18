@@ -6,6 +6,7 @@ import com.example.recipesphere.model.Recipe
 
 class RecipeViewHolder(
     private val binding: RecipeListItemBinding,
+    private val isMyRecipe: Boolean,
     listener: OnItemClickListener?
     ) : RecyclerView.ViewHolder(binding.root) {
 
@@ -16,7 +17,6 @@ class RecipeViewHolder(
             listener?.onItemClick(recipe)
         }
     }
-
 
     fun bind(recipe: Recipe?) {
         recipe?.let {
