@@ -1,6 +1,5 @@
 package com.example.recipesphere.model
 
-import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.firestoreSettings
@@ -78,7 +77,6 @@ class FirebaseModel {
             .addOnSuccessListener { document ->
                 val user = document.toObject(User::class.java)
                 if (user != null) {
-                    Log.d("FirebaseModel","user data : $user")
                     callback(Result.success(user))
                 } else {
                     callback(Result.failure(Exception("User not found")))

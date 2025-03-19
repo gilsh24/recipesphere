@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -18,10 +20,16 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        val localPropertiesFile = rootProject.file("local.properties")
+        val localProperties = Properties().apply {
+            if (localPropertiesFile.exists()) {
+                load(localPropertiesFile.inputStream())
+            }
+        }
 
-        buildConfigField("String", "CLOUD_NAME", "\"${project.properties["CLOUD_NAME"] ?: ""}\"")
-        buildConfigField("String", "API_KEY", "\"${project.properties["API_KEY"] ?: ""}\"")
-        buildConfigField("String", "SECRET_KEY", "\"${project.properties["SECRET_KEY"] ?: ""}\"")
+        buildConfigField("String", "CLOUD_NAME", "\"${localProperties.getProperty("cloudinary_cloud_name", "")}\"")
+        buildConfigField("String", "API_KEY", "\"${localProperties.getProperty("cloudinary_api_key", "")}\"")
+        buildConfigField("String", "API_SECRET", "\"${localProperties.getProperty("cloudinary_api_secret", "")}\"")
     }
 
     buildTypes {

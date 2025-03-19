@@ -20,7 +20,7 @@ class CloudinaryModel {
             val config = mapOf(
                 "cloud_name" to BuildConfig.CLOUD_NAME,
                 "api_key" to BuildConfig.API_KEY,
-                "api_secret" to BuildConfig.SECRET_KEY
+                "api_secret" to BuildConfig.API_SECRET
             )
             MyApplication.Globals.context?.let {
                 MediaManager.init(it, config)

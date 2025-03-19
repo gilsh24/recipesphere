@@ -9,12 +9,9 @@ class MyApplication: Application() {
         var context: Context? = null
     }
 
-
     override fun onCreate() {
         super.onCreate()
 
         Globals.context = applicationContext
-
     }
-
 }
