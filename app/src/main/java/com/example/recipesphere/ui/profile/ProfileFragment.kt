@@ -96,14 +96,19 @@ class ProfileFragment : Fragment() {
         val firstName = binding.firstNameTextView.text.toString()
         val lastName = binding.lastNameTextView.text.toString()
         val age = binding.ageTextView.text.toString()
-        if (didSetProfileImage) {
+        val bitmap = if (didSetProfileImage) {
             binding.imageView.isDrawingCacheEnabled = true
             binding.imageView.buildDrawingCache()
-            val bitmap = (binding.imageView.drawable as BitmapDrawable).bitmap
-
-            viewModel.uploadUserImage(bitmap, firstName, lastName, age)
+            (binding.imageView.drawable as BitmapDrawable).bitmap
         } else {
-            viewModel.updateUser(firstName, lastName, age)
+            null
+        }
+
+        viewModel.updateUserProfile(firstName, lastName, age, bitmap) { result ->
+            binding.progressBar.visibility = View.GONE
+            if(result.isSuccess){
+                Navigation.findNavController(view).popBackStack()
+            }
         }
     }
 

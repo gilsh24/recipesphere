@@ -108,15 +108,7 @@ class Model {
             name = user.email,
             onSuccess = { url ->
                 if (!url.isNullOrBlank()) {
-                    val updates = mapOf("photoURL" to url)
-                    firebaseModel.updateUser(user.uid, updates)
-                    { result ->
-                        if (result.isSuccess) {
-                            callback(Result.success(url))
-                        } else {
-                            callback(Result.failure(Exception("Firebase update failed")))
-                        }
-                    }
+                    callback(Result.success(url))
                 } else {
                     callback(Result.failure(Exception("Cloudinary URL is empty")))
                 }},

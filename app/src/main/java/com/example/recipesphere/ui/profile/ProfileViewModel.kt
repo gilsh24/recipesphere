@@ -44,42 +44,48 @@ class ProfileViewModel : ViewModel() {
         }
     }
 
-    fun updateUser(firstName: String, lastName: String, age: String) {
+    fun updateUserProfile(firstName: String, lastName: String, age: String, bitmap: Bitmap?, callback: (Result<Unit>) -> Unit) {
         _isLoading.value = true
         val uid = FirebaseAuth.getInstance().currentUser?.uid
-        if (uid != null) {
+        if (uid != null && currentUser != null) {
             val updates = mutableMapOf<String, Any>(
                 "firstName" to firstName,
                 "lastName" to lastName,
                 "age" to age.toInt()
             )
 
-            model.updateUser(uid, updates) { result ->
-                _updateResult.value = result
-
-                if (result.isSuccess) {
-                    getUser()
+            bitmap?.let {
+                model.uploadUserImage(it, currentUser!!) { result ->
+                    if (result.isSuccess) {
+                        model.updateUser(uid, updates + mapOf("photoURL" to result.getOrNull().toString())) { updateResult ->
+                            _updateResult.value = updateResult
+                            if(updateResult.isSuccess){
+                                getUser()
+                            }
+                            _isLoading.value = false
+                            callback(updateResult)
+                        }
+                    } else {
+                        _updateResult.value = Result.failure(Exception("Image upload failed"))
+                        _isLoading.value = false
+                        callback(Result.failure(Exception("Image upload failed")))
+                    }
                 }
-
-                _isLoading.value = false
+            } ?: run {
+                model.updateUser(uid, updates) { updateResult ->
+                    _updateResult.value = updateResult
+                    if(updateResult.isSuccess){
+                        getUser()
+                    }
+                    _isLoading.value = false
+                    callback(updateResult)
+                }
             }
         } else {
             _updateResult.value = Result.failure(Exception("User not logged in."))
             _isLoading.value = false
+            callback(Result.failure(Exception("User not logged in.")))
         }
     }
 
-    fun uploadUserImage(bitmap: Bitmap, firstName: String, lastName: String, age: String) {
-        _isLoading.value = true
-        if (currentUser != null) {
-            model.uploadUserImage(bitmap, currentUser!!) { result ->
-                if (result.isSuccess) {
-                    updateUser(firstName, lastName, age)
-                } else {
-                    _updateResult.value = Result.failure(Exception("Image upload failed"))
-                    _isLoading.value = false
-                }
-            }
-        }
-    }
 }
