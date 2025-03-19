@@ -33,19 +33,17 @@ class Model {
         val shared = Model()
     }
 
-    fun insertRecipe(recipe: Recipe, image: Bitmap?, storage: Storage?, callback: EmptyCallback) {
+    fun insertRecipe(recipe: Recipe, image: Bitmap?, callback: EmptyCallback) {
         firebaseModel.insertRecipe(recipe) {
             callback()
-            // let this code stay here for later
 //            image?.let {
 //                uploadTo(
-//                    storage,
 //                    image = image,
 //                    name = student.id,
 //                    callback = { uri ->
 //                        if (!uri.isNullOrBlank()) {
-//                            val st = student.copy(avatarUrl = uri)
-//                            firebaseModel.add(st, callback)
+//                            val st = recipe.copy(imageResId = uri)
+//                            firebaseModel.insertRecipe(st, callback)
 //                        } else {
 //                            callback()
 //                        }

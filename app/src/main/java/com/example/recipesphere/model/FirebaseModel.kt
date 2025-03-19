@@ -11,6 +11,7 @@ import com.google.firebase.firestore.firestoreSettings
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.memoryCacheSettings
 import com.google.firebase.ktx.Firebase
+import kotlin.random.Random
 
 class FirebaseModel {
 

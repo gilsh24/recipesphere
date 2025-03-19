@@ -15,10 +15,12 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class Recipe(
     @PrimaryKey val id: String,
+    val userId: String,
     val userName: String,
     val userAge: Int,
     val title: String,
     val difficultyLevel: Int,
+    val instructions: String,
     @TypeConverters(Converters::class)
     val ingredients: List<String>,  // List of ingredients
     val time: String,
@@ -42,6 +44,8 @@ data class Recipe(
 
         const val ID_KEY = "id"
         const val USER_NAME_KEY = "userName"
+        const val INSTRUCTIONS_KEY = "instructions"
+        const val USER_ID_KEY = "userID"
         const val USER_AGE_KEY = "userAge"
         const val TITLE_KEY = "title"
         const val DIFFICULTY_LEVEL_KEY = "difficultyLevel"
@@ -54,6 +58,8 @@ data class Recipe(
         fun fromJSON(json: Map<String, Any>): Recipe {
             val id = json[ID_KEY] as? String ?: ""
             val userName = json[USER_NAME_KEY] as? String ?: ""
+            val instructions = json[INSTRUCTIONS_KEY] as? String ?: ""
+            val userId = json[USER_ID_KEY] as? String ?: ""
             val userAge = when(val age = json[USER_AGE_KEY]) {
                 is Long -> age.toInt()
                 is Int -> age
@@ -96,7 +102,9 @@ data class Recipe(
                 time = time,
                 likes = likes,
                 imageResId = imageResId,
-                lastUpdated = lastUpdatedLongTimestamp
+                lastUpdated = lastUpdatedLongTimestamp,
+                userId = userId,
+                instructions = instructions
             )
         }
 
@@ -113,7 +121,9 @@ data class Recipe(
             TIME_KEY to time,
             LIKES_KEY to likes,
             IMAGE_RES_ID_KEY to imageResId,
-            LAST_UPDATED_KEY to FieldValue.serverTimestamp()
+            LAST_UPDATED_KEY to FieldValue.serverTimestamp(),
+            INSTRUCTIONS_KEY to instructions,
+            USER_ID_KEY to userId,
         )
 
 }
