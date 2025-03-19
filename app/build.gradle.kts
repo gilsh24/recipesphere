@@ -3,6 +3,7 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.androidx.navigation.safeargs)
     id("kotlin-kapt")
     id("kotlin-parcelize")
     alias(libs.plugins.google.services)

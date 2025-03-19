@@ -14,11 +14,10 @@ data class Recipe(
     val userName: String,
     val userAge: Int,
     val title: String,
-//    val description: String,
     val difficultyLevel: Int,
     @TypeConverters(Converters::class)
     val ingredients: List<String>,  // List of ingredients
     val time: String,
     val likes: Int,
-    val imageResId: Int  // You can also use URLs if needed
+    val imageResId: Int
 ) : Parcelable
