@@ -13,6 +13,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.navigation.Navigation
 import com.example.recipesphere.databinding.FragmentProfileBinding
 import com.example.recipesphere.model.Model
+import com.example.recipesphere.model.User
+import com.google.firebase.auth.FirebaseAuth
 import com.squareup.picasso.Picasso
 
 class ProfileFragment : Fragment() {
@@ -54,7 +56,7 @@ class ProfileFragment : Fragment() {
                 binding.ageTextView.setText(String.format(user.age.toString()))
                 binding.emailAddrView.text = user.email
 
-                if (user.photoURL != "default_avatar"){
+                if (!user.photoURL.isNullOrEmpty() && user.photoURL != "default_avatar"){
                     Picasso.get().load(user.photoURL).into(binding.imageView)
                 } else {
                     binding.imageView.setImageResource(com.example.recipesphere.R.drawable.avatar)
@@ -96,19 +98,27 @@ class ProfileFragment : Fragment() {
         val firstName = binding.firstNameTextView.text.toString()
         val lastName = binding.lastNameTextView.text.toString()
         val age = binding.ageTextView.text.toString()
-        val bitmap = if (didSetProfileImage) {
-            binding.imageView.isDrawingCacheEnabled = true
-            binding.imageView.buildDrawingCache()
-            (binding.imageView.drawable as BitmapDrawable).bitmap
-        } else {
-            null
-        }
 
-        viewModel.updateUserProfile(firstName, lastName, age, bitmap) { result ->
+        val user = User(
+            uid = FirebaseAuth.getInstance().currentUser?.uid ?: "",
+            firstName = firstName,
+            lastName = lastName,
+            age = age.toInt(),
+            email = "",
+            photoURL = ""
+        )
+
+        binding.progressBar.visibility = View.VISIBLE
+
+        Model.shared.update(user, if (didSetProfileImage) (binding.imageView.drawable as BitmapDrawable).bitmap else null) {
             binding.progressBar.visibility = View.GONE
-            if(result.isSuccess){
-                Navigation.findNavController(view).popBackStack()
+            if(didSetProfileImage){
+                didSetProfileImage = false;
             }
+
+            Toast.makeText(requireContext(), "Profile updated succ", Toast.LENGTH_SHORT).show()
+
+            viewModel.getUser()
         }
     }
 

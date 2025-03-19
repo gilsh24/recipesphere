@@ -43,49 +43,4 @@ class ProfileViewModel : ViewModel() {
             _isLoading.value = false
         }
     }
-
-    fun updateUserProfile(firstName: String, lastName: String, age: String, bitmap: Bitmap?, callback: (Result<Unit>) -> Unit) {
-        _isLoading.value = true
-        val uid = FirebaseAuth.getInstance().currentUser?.uid
-        if (uid != null && currentUser != null) {
-            val updates = mutableMapOf<String, Any>(
-                "firstName" to firstName,
-                "lastName" to lastName,
-                "age" to age.toInt()
-            )
-
-            bitmap?.let {
-                model.uploadUserImage(it, currentUser!!) { result ->
-                    if (result.isSuccess) {
-                        model.updateUser(uid, updates + mapOf("photoURL" to result.getOrNull().toString())) { updateResult ->
-                            _updateResult.value = updateResult
-                            if(updateResult.isSuccess){
-                                getUser()
-                            }
-                            _isLoading.value = false
-                            callback(updateResult)
-                        }
-                    } else {
-                        _updateResult.value = Result.failure(Exception("Image upload failed"))
-                        _isLoading.value = false
-                        callback(Result.failure(Exception("Image upload failed")))
-                    }
-                }
-            } ?: run {
-                model.updateUser(uid, updates) { updateResult ->
-                    _updateResult.value = updateResult
-                    if(updateResult.isSuccess){
-                        getUser()
-                    }
-                    _isLoading.value = false
-                    callback(updateResult)
-                }
-            }
-        } else {
-            _updateResult.value = Result.failure(Exception("User not logged in."))
-            _isLoading.value = false
-            callback(Result.failure(Exception("User not logged in.")))
-        }
-    }
-
 }

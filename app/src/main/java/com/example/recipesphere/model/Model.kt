@@ -9,6 +9,8 @@ import com.example.recipesphere.model.dao.AppLocalDb
 import com.example.recipesphere.model.dao.AppLocalDbRepository
 import java.util.concurrent.Executors
 
+typealias EmptyCallback = () -> Unit
+
 class Model {
 
     private val database: AppLocalDbRepository = AppLocalDb.database
@@ -94,9 +96,35 @@ class Model {
         firebaseModel.updateUser(uid, updates, callback)
     }
 
+    fun update(user: User, image: Bitmap?, callback: EmptyCallback) {
+        firebaseModel.updateUser(user.uid, user.toMap()) { result ->
+            if (result.isSuccess) {
+                image?.let {
+                    cloudinaryModel.uploadImage(it, user.email, onSuccess = { uri ->
+                        if (!uri.isNullOrBlank()) {
+                            val updatedUser = user.copy(photoURL = uri)
+                            firebaseModel.updateUser(updatedUser.uid, updatedUser.toMap()) { updateResult ->
+                                if (updateResult.isSuccess) {
+                                    callback()
+                                } else {
+                                    callback()
+                                }
+                            }
+                        } else {
+                            callback()
+                        }
+                    }, onError = { callback() })
+                } ?: callback()
+            } else {
+                callback()
+            }
+        }
+    }
+
     fun signOut() {
         firebaseModel.signOut()
     }
+
 
     fun uploadUserImage(
         bitmap: Bitmap,
