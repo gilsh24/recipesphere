@@ -13,6 +13,7 @@ class Model {
     private val database: AppLocalDbRepository = AppLocalDb.database
     private val executer = Executors.newSingleThreadExecutor()
     private var mainHandler = HandlerCompat.createAsync(Looper.getMainLooper())
+    private val firebase = FirebaseModel()
 
     companion object {
         val shared = Model()
@@ -64,5 +65,34 @@ class Model {
             }
         }
     }
+    fun registerUser(
+        email: String,
+        password: String,
+        firstName: String,
+        lastName: String,
+        age: Int,
+        callback: (Result<Unit>) -> Unit
+    ) {
+        firebase.registerUser(email, password, firstName, lastName, age, callback)
+    }
 
+    fun signInUser(email: String, password: String, callback: (Result<Unit>) -> Unit) {
+        firebase.signInUser(email, password, callback)
+    }
+
+    fun getUser(uid: String, callback: (Result<User>) -> Unit) {
+        firebase.getUser(uid, callback)
+    }
+
+    fun isUserSignedIn(): Boolean {
+        return firebase.isUserSignedIn()
+    }
+
+    fun updateUser(uid: String, updates: Map<String, Any>, callback: (Result<Unit>) -> Unit) {
+        firebase.updateUser(uid, updates, callback)
+    }
+
+    fun signOut() {
+        firebase.signOut()
+    }
 }
