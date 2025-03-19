@@ -53,6 +53,18 @@ class Model {
         }
     }
 
+    // remember to change get by user id not by recipeId
+    fun getUserRecipes(id: String, callback: RecipeCallback) {
+        executer.execute {
+            val recipe = database.recipeDao().getRecipeById(id)
+
+            Thread.sleep(3000)
+
+            mainHandler.post {
+                callback(listOf(recipe))
+            }
+        }
+    }
     fun registerUser(
         email: String,
         password: String,
