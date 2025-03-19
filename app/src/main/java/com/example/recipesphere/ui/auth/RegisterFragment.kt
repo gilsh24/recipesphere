@@ -5,12 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
-import com.example.recipesphere.R
-import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.example.recipesphere.databinding.FragmentRegisterBinding
 
 class RegisterFragment : Fragment(){
@@ -18,14 +15,10 @@ class RegisterFragment : Fragment(){
     private lateinit var authViewModel: AuthViewModel
     private lateinit var binding: FragmentRegisterBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentRegisterBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -34,23 +27,37 @@ class RegisterFragment : Fragment(){
         super.onViewCreated(view, savedInstanceState)
         authViewModel = ViewModelProvider(this)[AuthViewModel::class.java]
 
-        view.findViewById<Button>(R.id.registerButton).setOnClickListener {
-            val email = view.findViewById<EditText>(R.id.emailEditText).text.toString()
-            val password = view.findViewById<EditText>(R.id.passwordEditText).text.toString()
-            val firstName = view.findViewById<EditText>(R.id.firstNameEditText).text.toString()
-            val lastName = view.findViewById<EditText>(R.id.lastNameEditText).text.toString()
-            val age = view.findViewById<EditText>(R.id.ageEditText).text.toString().toInt()
+        binding.registerButton.setOnClickListener {
+            val email = binding.emailEditText.text.toString()
+            val password = binding.passwordEditText.text.toString()
+            val firstName = binding.firstNameEditText.text.toString()
+            val lastName = binding.lastNameEditText.text.toString()
+            val age = binding.ageEditText.text.toString().toIntOrNull()
 
-            authViewModel.registerUser(email, password, firstName, lastName, age)
+            if (email.isNotEmpty() && password.isNotEmpty() && firstName.isNotEmpty() && lastName.isNotEmpty() && age != null) {
+                authViewModel.registerUser(email, password, firstName, lastName, age)
+            } else {
+                Toast.makeText(requireContext(), "Please fill in all fields correctly.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        authViewModel.isLoading.observe(viewLifecycleOwner) {isLoading ->
+            if (isLoading){
+                binding.progressBar.visibility = View.VISIBLE // Example using a ProgressBar
+                binding.registerButton.isEnabled = false
+            } else {
+                binding.progressBar.visibility = View.GONE
+                binding.registerButton.isEnabled = true
+            }
         }
 
         authViewModel.registerResult.observe(viewLifecycleOwner) { result ->
             if (result.isSuccess) {
                 Toast.makeText(requireContext(), "Registration Successful!", Toast.LENGTH_SHORT).show()
                 // Go back to Sign In
-                Navigation.findNavController(view).popBackStack()
+                findNavController().popBackStack()
             } else {
-                Toast.makeText(requireContext(), "Error: ${result.exceptionOrNull()?.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Error: Registration Failed", Toast.LENGTH_SHORT).show()
             }
         }
 

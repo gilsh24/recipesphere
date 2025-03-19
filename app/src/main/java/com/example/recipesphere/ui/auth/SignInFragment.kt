@@ -6,30 +6,21 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.recipesphere.MainActivity
 import com.example.recipesphere.R
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
-import com.example.recipesphere.databinding.FragmentRegisterBinding
 import com.example.recipesphere.databinding.FragmentSigninBinding
 
 class SignInFragment : Fragment(){
     private lateinit var authViewModel: AuthViewModel
     private lateinit var binding: FragmentSigninBinding
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentSigninBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -38,16 +29,28 @@ class SignInFragment : Fragment(){
         super.onViewCreated(view, savedInstanceState)
         authViewModel = ViewModelProvider(this)[AuthViewModel::class.java]
 
-        view.findViewById<Button>(R.id.signInButton).setOnClickListener {
-            val email = view.findViewById<EditText>(R.id.emailEditText).text.toString()
-            val password = view.findViewById<EditText>(R.id.passwordEditText).text.toString()
-
-            authViewModel.loginUser(email, password)
+        binding.signInButton.setOnClickListener {
+            val email = binding.emailEditText.text.toString()
+            val password = binding.passwordEditText.text.toString()
+            if (email.isNotEmpty() && password.isNotEmpty()) {
+                authViewModel.loginUser(email, password)
+            } else {
+                Toast.makeText(requireContext(), "Please enter email and password.", Toast.LENGTH_SHORT).show()
+            }
         }
 
-        view.findViewById<Button>(R.id.goToRegisterButton).setOnClickListener {
+        binding.goToRegisterButton.setOnClickListener {
             findNavController().navigate(R.id.action_signInFragment_to_registerFragment)
-//            Navigation.findNavController(it).navigate(R.id.action_signInFragment_to_registerFragment)
+        }
+
+        authViewModel.isLoading.observe(viewLifecycleOwner) {isLoading ->
+            if (isLoading){
+                binding.progressBar.visibility = View.VISIBLE
+                binding.signInButton.isEnabled = false
+            } else {
+                binding.progressBar.visibility = View.GONE
+                binding.signInButton.isEnabled = true
+            }
         }
 
         authViewModel.loginResult.observe(viewLifecycleOwner) { result ->
@@ -58,7 +61,7 @@ class SignInFragment : Fragment(){
                 startActivity(intent)
                 requireActivity().finish()
             } else {
-                Toast.makeText(requireContext(), "Error: ${result.exceptionOrNull()?.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Error: SignIn Failed", Toast.LENGTH_SHORT).show()
             }
         }
 
