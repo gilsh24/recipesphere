@@ -116,7 +116,7 @@ class ProfileFragment : Fragment() {
                 didSetProfileImage = false;
             }
 
-            Toast.makeText(requireContext(), "Profile updated succ", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Profile updated successfully", Toast.LENGTH_SHORT).show()
 
             viewModel.getUser()
         }
