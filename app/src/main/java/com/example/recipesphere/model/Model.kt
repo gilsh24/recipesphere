@@ -98,7 +98,7 @@ class Model {
     fun refreshAllRecipes() {
         loadingState.postValue(LoadingState.LOADING)
         val lastUpdated: Long = Recipe.lastUpdated
-        firebase.getAllStudents(lastUpdated) { recipes ->
+        firebase.getAllRecipes(lastUpdated) { recipes ->
             executer.execute {
                 var currentTime = lastUpdated
                 for (student in recipes) {

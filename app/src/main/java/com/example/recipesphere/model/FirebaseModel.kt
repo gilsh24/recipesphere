@@ -116,7 +116,7 @@ class FirebaseModel {
             }
     }
 
-    fun getAllStudents(sinceLastUpdated: Long, callback: RecipeCallback) {
+    fun getAllRecipes(sinceLastUpdated: Long, callback: RecipeCallback) {
         database.collection(Constants.Collections.RECIPES)
             .whereGreaterThanOrEqualTo(Recipe.LAST_UPDATED_KEY, sinceLastUpdated.toFirebaseTimestamp)
             .get()
