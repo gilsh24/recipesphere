@@ -36,10 +36,16 @@ class BrowseRecipesFragment : Fragment() {
             // Create an instance of RecipesListFragment with the recipes
             val recipesListFragment = RecipesListFragment.newInstance(recipes)
 
-            // Add RecipesListFragment as a child fragment
-            childFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, recipesListFragment)
-                .commit()
+//            // Add RecipesListFragment as a child fragment
+//            childFragmentManager.beginTransaction()
+//                .replace(R.id.fragment_container, recipesListFragment)
+//                .commit()
+
+            if (!childFragmentManager.isStateSaved) { // Added check
+                childFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, recipesListFragment)
+                    .commit()
+            }
         }
 
 

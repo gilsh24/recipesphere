@@ -1,5 +1,6 @@
 package com.example.recipesphere.model
 
+import android.graphics.Bitmap
 import android.os.Looper
 import androidx.core.os.HandlerCompat
 import com.example.recipesphere.R
@@ -13,7 +14,8 @@ class Model {
     private val database: AppLocalDbRepository = AppLocalDb.database
     private val executer = Executors.newSingleThreadExecutor()
     private var mainHandler = HandlerCompat.createAsync(Looper.getMainLooper())
-    private val firebase = FirebaseModel()
+    private val firebaseModel = FirebaseModel()
+    private val cloudinaryModel = CloudinaryModel()
 
     companion object {
         val shared = Model()
@@ -61,26 +63,53 @@ class Model {
         age: Int,
         callback: (Result<Unit>) -> Unit
     ) {
-        firebase.registerUser(email, password, firstName, lastName, age, callback)
+        firebaseModel.registerUser(email, password, firstName, lastName, age, callback)
     }
 
     fun signInUser(email: String, password: String, callback: (Result<Unit>) -> Unit) {
-        firebase.signInUser(email, password, callback)
+        firebaseModel.signInUser(email, password, callback)
     }
 
     fun getUser(uid: String, callback: (Result<User>) -> Unit) {
-        firebase.getUser(uid, callback)
+        firebaseModel.getUser(uid, callback)
     }
 
     fun isUserSignedIn(): Boolean {
-        return firebase.isUserSignedIn()
+        return firebaseModel.isUserSignedIn()
     }
 
     fun updateUser(uid: String, updates: Map<String, Any>, callback: (Result<Unit>) -> Unit) {
-        firebase.updateUser(uid, updates, callback)
+        firebaseModel.updateUser(uid, updates, callback)
     }
 
     fun signOut() {
-        firebase.signOut()
+        firebaseModel.signOut()
     }
+
+    fun uploadUserImage(
+        bitmap: Bitmap,
+        user: User,
+        callback: (Result<String?>) -> Unit
+    ){
+        cloudinaryModel.uploadImage(
+            bitmap = bitmap,
+            name = user.email,
+            onSuccess = { url ->
+                if (!url.isNullOrBlank()) {
+                    val updates = mapOf("photoURL" to url)
+                    firebaseModel.updateUser(user.uid, updates)
+                    { result ->
+                        if (result.isSuccess) {
+                            callback(Result.success(url))
+                        } else {
+                            callback(Result.failure(Exception("Firebase update failed")))
+                        }
+                    }
+                } else {
+                    callback(Result.failure(Exception("Cloudinary URL is empty")))
+                }},
+            onError = { callback(Result.failure(Exception("Cloudinary upload failed"))) }
+        )
+    }
+
 }
