@@ -6,4 +6,8 @@ typealias RecipeCallback = (List<Recipe>) -> Unit
 typealias EmptyCallback = () -> Unit
 
 object Constants {
+
+    object Collections {
+        const val RECIPES = "recipes"
+    }
 }
