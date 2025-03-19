@@ -1,5 +1,10 @@
 package com.example.recipesphere.model
 
+import android.util.Log
+import com.example.recipesphere.base.Constants
+import com.example.recipesphere.base.EmptyCallback
+import com.example.recipesphere.base.RecipeCallback
+import com.example.recipesphere.utils.extensions.toFirebaseTimestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.firestoreSettings
@@ -101,5 +106,34 @@ class FirebaseModel {
         auth.signOut()
     }
 
+    fun insertRecipe(recipe: Recipe, callback: EmptyCallback) {
+        database.collection(Constants.Collections.RECIPES).document(recipe.id).set(recipe.json)
+            .addOnCompleteListener {
+                callback()
+            }
+            .addOnFailureListener {
+                Log.d("TAG", it.toString() + it.message)
+            }
+    }
+
+    fun getAllRecipes(sinceLastUpdated: Long, callback: RecipeCallback) {
+        database.collection(Constants.Collections.RECIPES)
+            .whereGreaterThanOrEqualTo(Recipe.LAST_UPDATED_KEY, sinceLastUpdated.toFirebaseTimestamp)
+            .get()
+            .addOnCompleteListener {
+                when (it.isSuccessful) {
+                    true -> {
+                        val recipes: MutableList<Recipe> = mutableListOf()
+                        for (json in it.result) {
+                            recipes.add(Recipe.fromJSON(json.data))
+                        }
+                        Log.d("TAG", recipes.size.toString())
+                        callback(recipes)
+                    }
+
+                    false -> callback(listOf())
+                }
+            }
+    }
 }
 

@@ -1,5 +1,6 @@
 package com.example.recipesphere.model.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -11,7 +12,7 @@ import com.example.recipesphere.model.Recipe
 interface RecipeDao {
 
     @Query("SELECT * FROM Recipe")
-    fun getAllRecipes(): List<Recipe>
+    fun getAllRecipes(): LiveData<List<Recipe>>
 
     @Query("SELECT * FROM Recipe WHERE id =:id")
     fun getRecipeById(id: String): Recipe

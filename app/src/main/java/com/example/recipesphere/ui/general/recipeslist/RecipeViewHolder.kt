@@ -21,7 +21,6 @@ class RecipeViewHolder(
     fun bind(recipe: Recipe?) {
         recipe?.let {
             this.recipe = recipe
-            println("binding recipe: $it")
             binding.imgRecipe.setImageResource(it.imageResId)
             binding.tvNameAge.text = "${recipe.userName}, ${recipe.userAge}"
             binding.tvRecipeTitle.text = recipe.title
