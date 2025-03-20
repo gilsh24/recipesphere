@@ -9,7 +9,7 @@ import com.example.recipesphere.base.EmptyCallback
 import com.example.recipesphere.base.RecipeCallback
 import com.example.recipesphere.model.dao.AppLocalDb
 import com.example.recipesphere.model.dao.AppLocalDbRepository
-import com.google.android.gms.auth.api.signin.internal.Storage
+import com.google.firebase.auth.FirebaseAuth
 import java.util.concurrent.Executors
 
 
@@ -34,21 +34,24 @@ class Model {
     }
 
 
-    // remember to change get by user id not by recipeId
-    fun getUserRecipes(id: String, callback: RecipeCallback) {
+    fun getCurrentUserRecipes(callback: RecipeCallback) {
         executer.execute {
-            val recipe = database.recipeDao().getRecipeById(id)
-
-            Thread.sleep(3000)
-
-            mainHandler.post {
-                if (recipe!=null){
-                    callback(listOf(recipe))
-                }
+            val id = FirebaseAuth.getInstance().currentUser?.uid
+            if(id == null) {
                 callback(emptyList())
+            }
+            id?.let {
+                val recipes = database.recipeDao().getRecipesByUserId(id)
+                Thread.sleep(3000)
+
+                mainHandler.post {
+                    callback(recipes)
+                }
             }
         }
     }
+
+
     fun registerUser(
         email: String,
         password: String,
