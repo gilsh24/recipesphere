@@ -8,33 +8,13 @@
     tools:context=".ui.profile.ProfileFragment">
 
     <ImageView
-        android:id="@+id/logoView"
-        android:layout_width="wrap_content"
-        android:layout_height="53dp"
-        android:scaleType="fitCenter"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/recipesphere" />
-
-    <ImageView
-        android:id="@+id/profileView"
-        android:layout_width="0dp"
-        android:layout_height="53dp"
-        android:scaleType="fitCenter"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logoView"
-        app:srcCompat="@drawable/profile" />
-
-    <ImageView
         android:id="@+id/imageView"
         android:layout_width="0dp"
         android:layout_height="153dp"
         android:scaleType="fitCenter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profileView"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/avatar" />
 
     <TextView
