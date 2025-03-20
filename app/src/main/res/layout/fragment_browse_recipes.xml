@@ -19,19 +19,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/etSearch"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="8dp"
-        android:drawableStart="@android:drawable/ic_menu_search"
-        android:hint="Search Recipes"
-        android:padding="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvRecipes"
         android:clipToPadding="false"
@@ -39,6 +26,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         tools:listitem="@layout/recipe_list_item"
-        app:layout_constraintTop_toBottomOf="@+id/etSearch"/>
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
