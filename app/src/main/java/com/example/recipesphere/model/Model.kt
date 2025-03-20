@@ -12,7 +12,6 @@ import com.example.recipesphere.model.dao.AppLocalDbRepository
 import com.google.android.gms.auth.api.signin.internal.Storage
 import java.util.concurrent.Executors
 
-typealias EmptyCallback = () -> Unit
 
 class Model {
 
@@ -26,6 +25,7 @@ class Model {
     private var mainHandler = HandlerCompat.createAsync(Looper.getMainLooper())
     private val firebaseModel = FirebaseModel()
     private val cloudinaryModel = CloudinaryModel()
+    private val edamamModel = EdamamModel()
     val recipes: LiveData<List<Recipe>> = database.recipeDao().getAllRecipes()
     val loadingState: MutableLiveData<LoadingState> = MutableLiveData<LoadingState>()
 
@@ -33,27 +33,6 @@ class Model {
         val shared = Model()
     }
 
-    fun insertRecipe(recipe: Recipe, image: Bitmap?, storage: Storage?, callback: EmptyCallback) {
-        firebaseModel.insertRecipe(recipe) {
-            callback()
-            // let this code stay here for later
-//            image?.let {
-//                uploadTo(
-//                    storage,
-//                    image = image,
-//                    name = student.id,
-//                    callback = { uri ->
-//                        if (!uri.isNullOrBlank()) {
-//                            val st = student.copy(avatarUrl = uri)
-//                            firebaseModel.add(st, callback)
-//                        } else {
-//                            callback()
-//                        }
-//                    },
-//                )
-//            } ?: callback()
-        }
-    }
 
     // remember to change get by user id not by recipeId
     fun getUserRecipes(id: String, callback: RecipeCallback) {
@@ -63,7 +42,10 @@ class Model {
             Thread.sleep(3000)
 
             mainHandler.post {
-                callback(listOf(recipe))
+                if (recipe!=null){
+                    callback(listOf(recipe))
+                }
+                callback(emptyList())
             }
         }
     }
@@ -90,32 +72,24 @@ class Model {
         return firebaseModel.isUserSignedIn()
     }
 
-    fun updateUser(uid: String, updates: Map<String, Any>, callback: (Result<Unit>) -> Unit) {
-        firebaseModel.updateUser(uid, updates, callback)
-    }
-
-    fun update(user: User, image: Bitmap?, callback: EmptyCallback) {
-        firebaseModel.updateUser(user.uid, user.toMap()) { result ->
-            if (result.isSuccess) {
-                image?.let {
-                    cloudinaryModel.uploadImage(it, user.email, onSuccess = { uri ->
-                        if (!uri.isNullOrBlank()) {
-                            val updatedUser = user.copy(photoURL = uri)
-                            firebaseModel.updateUser(updatedUser.uid, updatedUser.toMap()) { updateResult ->
-                                if (updateResult.isSuccess) {
-                                    callback()
-                                } else {
-                                    callback()
-                                }
+    fun updateUser(user: User, image: Bitmap?, callback: EmptyCallback) {
+        firebaseModel.updateUser(user.uid, user.toMap()) {
+            image?.let {
+                cloudinaryModel.uploadImage(it, user.email, onSuccess = { uri ->
+                    if (!uri.isNullOrBlank()) {
+                        val updatedUser = user.copy(photoURL = uri)
+                        firebaseModel.updateUser(updatedUser.uid, updatedUser.toMap()) { updateResult ->
+                            if (updateResult.isSuccess) {
+                                callback()
+                            } else {
+                                callback()
                             }
-                        } else {
-                            callback()
                         }
-                    }, onError = { callback() })
-                } ?: callback()
-            } else {
-                callback()
-            }
+                    } else {
+                        callback()
+                    }
+                }, onError = { callback() })
+            } ?: callback()
         }
     }
 
@@ -123,25 +97,26 @@ class Model {
         firebaseModel.signOut()
     }
 
-
-    fun uploadUserImage(
-        bitmap: Bitmap,
-        user: User,
-        callback: (Result<String?>) -> Unit
-    ){
-        cloudinaryModel.uploadImage(
-            bitmap = bitmap,
-            name = user.email,
-            onSuccess = { url ->
-                if (!url.isNullOrBlank()) {
-                    callback(Result.success(url))
-                } else {
-                    callback(Result.failure(Exception("Cloudinary URL is empty")))
-                }},
-            onError = { callback(Result.failure(Exception("Cloudinary upload failed"))) }
-        )
+    fun addRecipe(recipe: Recipe, image: Bitmap?, callback: EmptyCallback) {
+        firebaseModel.insertRecipe(recipe) {
+            image?.let {
+                cloudinaryModel.uploadImage(it, recipe.id, onSuccess = { uri ->
+                    if (!uri.isNullOrBlank()) {
+                        val updatedRecipe = recipe.copy(photoURL = uri)
+                        firebaseModel.insertRecipe(updatedRecipe) { updateResult ->
+                            if (updateResult.isSuccess) {
+                                callback()
+                            } else {
+                                callback()
+                            }
+                        }
+                    } else {
+                        callback()
+                    }
+                }, onError = { callback() })
+            } ?: callback()
+        }
     }
-
 
     fun refreshAllRecipes() {
         loadingState.postValue(LoadingState.LOADING)
@@ -160,6 +135,16 @@ class Model {
 
                 Recipe.lastUpdated = currentTime
                 loadingState.postValue(LoadingState.LOADED)
+            }
+        }
+    }
+
+    fun getNutritionData(ingredients: List<String>, callback: (EdamamResponse?) -> Unit) {
+        executer.execute {
+            edamamModel.getNutritionFacts(ingredients) { response ->
+                mainHandler.post {
+                    callback(response)
+                }
             }
         }
     }

@@ -30,7 +30,7 @@ class CloudinaryModel {
         }
     }
 
-    fun getMediaManager(): MediaManager {
+    private fun getMediaManager(): MediaManager {
         ensureMediaManagerInitialized()
         return mediaManager!!
     }

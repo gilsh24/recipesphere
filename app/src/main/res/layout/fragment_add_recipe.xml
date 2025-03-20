@@ -1,22 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.addrecipe.AddRecipeFragment">
+    android:padding="16dp">
 
-    <TextView
-        android:id="@+id/text2"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/etRecipeName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Enter your recipe's name"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <ImageView
+            android:id="@+id/RecipeImage"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:scaleType="fitCenter"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etRecipeName"
+            app:srcCompat="@drawable/recipe_avatar" />
+
+        <ImageButton
+            android:id="@+id/takePhotoButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:src="@drawable/add_photo"
+            app:layout_constraintBottom_toBottomOf="@+id/RecipeImage"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <EditText
+            android:id="@+id/etIngredients"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:hint="Add recipe ingredients..."
+            android:inputType="textMultiLine"
+            app:layout_constraintTop_toBottomOf="@id/RecipeImage"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp" />
+
+        <EditText
+            android:id="@+id/etInstructions"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:hint="Add recipe instructions..."
+            android:inputType="textMultiLine"
+            app:layout_constraintTop_toBottomOf="@id/etIngredients"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp" />
+
+        <EditText
+            android:id="@+id/etPreparationTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Enter preparation time"
+            app:layout_constraintTop_toBottomOf="@id/etInstructions"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/etDifficultyLevel"
+            android:layout_marginTop="16dp" />
+
+        <EditText
+            android:id="@+id/etDifficultyLevel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Enter difficulty level (1-5)"
+            app:layout_constraintTop_toBottomOf="@id/etInstructions"
+            app:layout_constraintStart_toEndOf="@id/etPreparationTime"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="8dp" />
+
+        <Button
+            android:id="@+id/btnSubmit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Submit Recipe"
+            app:layout_constraintTop_toBottomOf="@id/etPreparationTime"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
