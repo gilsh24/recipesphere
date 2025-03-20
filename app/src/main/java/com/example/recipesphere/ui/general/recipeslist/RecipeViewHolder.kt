@@ -1,6 +1,7 @@
 package com.example.recipesphere.ui.general.recipeslist
 
 import androidx.recyclerview.widget.RecyclerView
+import com.example.recipesphere.R
 import com.example.recipesphere.databinding.RecipeListItemBinding
 import com.example.recipesphere.model.Recipe
 import com.squareup.picasso.Picasso
@@ -34,9 +35,10 @@ class RecipeViewHolder(
             if (recipe.photoURL.isNotEmpty()) {
                 Picasso.get()
                     .load(recipe.photoURL)
+                    .placeholder(R.drawable.recipe_avatar)
                     .into(binding.imgRecipe)
             } else {
-                binding.imgRecipe.setImageResource(com.example.recipesphere.R.drawable.recipe_avatar)
+                binding.imgRecipe.setImageResource(R.drawable.recipe_avatar)
             }
         }
     }
