@@ -23,9 +23,14 @@ class RecipeViewHolder(
         recipe?.let {
             this.recipe = recipe
             binding.tvNameAge.text = "${recipe.userName}, ${recipe.userAge}"
-            binding.tvRecipeTitle.text = "Title: ${recipe.title}"
-            binding.tvIngredients.text = "Ingredients: ${recipe.ingredients.joinToString(", ")}"
-            binding.tvTime.text = recipe.time
+            binding.tvRecipeTitle.text = "Recipe: ${recipe.title}"
+            val ingredientsText = "Ingredients: ${recipe.ingredients.joinToString(", ")}"
+            if (ingredientsText.length > 25) {
+                binding.tvIngredients.text = ingredientsText.substring(0, 25) + "..."
+            } else {
+                binding.tvIngredients.text = ingredientsText
+            }
+            binding.tvTime.text = "${recipe.time} Minutes"
             if (recipe.photoURL.isNotEmpty()) {
                 Picasso.get()
                     .load(recipe.photoURL)
