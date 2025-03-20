@@ -1,10 +1,13 @@
 package com.example.recipesphere.ui.addrecipe
 
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -20,8 +23,9 @@ class AddRecipeFragment : Fragment() {
 
     private var _binding: FragmentAddRecipeBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: MyRecipesViewModel by viewModels()
-    private var recipeToEdit: Recipe? = null
+    private val viewModel: AddRecipeViewModel by viewModels()
+    private var cameraLauncher: ActivityResultLauncher<Void?>? = null
+    private var didSetProfileImage = false
 
     companion object {
         private const val ARG_RECIPE = "arg_recipe"
@@ -29,7 +33,6 @@ class AddRecipeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        recipeToEdit = arguments?.getParcelable<Recipe>(ARG_RECIPE)
     }
 
     override fun onCreateView(
@@ -38,13 +41,13 @@ class AddRecipeFragment : Fragment() {
     ): View {
         _binding = FragmentAddRecipeBinding.inflate(inflater, container, false)
 
-        recipeToEdit?.let { recipe ->
-            binding.etRecipeName.setText(recipe.title)
-            binding.etIngredients.setText(recipe.ingredients.joinToString(", "))
-            binding.etInstructions.setText(recipe.instructions)
-            binding.etPreparationTime.setText(recipe.time)
-            binding.etDifficultyLevel.setText(recipe.difficultyLevel.toString())
-            binding.btnSubmit.text = "Update Recipe"
+        cameraLauncher = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
+            binding.RecipeImage.setImageBitmap(bitmap)
+            didSetProfileImage = true
+        }
+
+        binding.takePhotoButton.setOnClickListener {
+            cameraLauncher?.launch(null)
         }
 
         return binding.root
@@ -57,40 +60,41 @@ class AddRecipeFragment : Fragment() {
     }
 
     private fun onSaveClicked(view: View?) {
-        val title = binding.etRecipeName.text.toString()
-        val ingredients = binding.etIngredients.text.toString().split(",").map { it.trim() }
-        val instructions = binding.etInstructions.text.toString()
-        val time = binding.etPreparationTime.text.toString()
-        val difficultyLevel = binding.etDifficultyLevel.text.toString().toIntOrNull() ?: 1
 
-        val recipe = if (recipeToEdit != null) {
-            recipeToEdit!!.copy(
-                title = title,
-                ingredients = ingredients,
-                instructions = instructions,
-                time = time,
-                difficultyLevel = difficultyLevel
-            )
-        } else {
-            Recipe(
-                id = Random.nextInt(1,1001).toString(),
-                userId = FirebaseAuth.getInstance().currentUser?.uid ?: "0",
-                userName = "Amit",
-                userAge = 23,
-                title = title,
-                difficultyLevel = difficultyLevel,
-                ingredients = ingredients,
-                instructions = instructions,
-                time = time,
-                likes = 0,
-                imageResId = 123
-            )
-        }
-
-        Model.shared.insertRecipe(recipe, null) {
-            Toast.makeText(requireContext(), "Recipe added!", Toast.LENGTH_SHORT).show()
+        val uid = FirebaseAuth.getInstance().currentUser?.uid
+        if (uid == null) {
+            Toast.makeText(requireContext(), "User not logged in", Toast.LENGTH_SHORT).show()
             findNavController().popBackStack()
+            return
         }
+
+        viewModel.user.observe(viewLifecycleOwner){ currUser ->
+            if (currUser != null){
+                val userName = "${currUser.firstName} ${currUser.lastName}"
+                val recipe = Recipe(
+                    id = Random.nextInt(1, 1001).toString(),
+                    title = binding.etRecipeName.text.toString(),
+                    ingredients = binding.etIngredients.text.toString().split(",").map { it.trim() },
+                    instructions = binding.etInstructions.text.toString(),
+                    time = binding.etPreparationTime.text.toString(),
+                    difficultyLevel = binding.etDifficultyLevel.text.toString().toIntOrNull() ?: 1,
+                    userId = currUser.uid,
+                    userName = userName ,
+                    userAge = currUser.age,
+                    likes = 0,
+                    imageResId = 123
+                )
+                Model.shared.addRecipe(recipe, if (didSetProfileImage) (binding.RecipeImage.drawable as BitmapDrawable).bitmap else null) {
+                    Toast.makeText(requireContext(), "Recipe added!", Toast.LENGTH_SHORT).show()
+                    findNavController().popBackStack()
+                }
+            } else{
+                Toast.makeText(requireContext(), "User data not found", Toast.LENGTH_SHORT).show()
+            }
+
+        }
+        viewModel.getUser()
+
     }
 
     override fun onDestroyView() {

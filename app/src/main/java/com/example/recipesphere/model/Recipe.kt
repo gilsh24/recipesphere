@@ -26,6 +26,7 @@ data class Recipe(
     val time: String,
     val likes: Int,
     val imageResId: Int,
+    val photoURL: String = "",
     val lastUpdated: Long? = null
 ) : Parcelable {
     companion object {
@@ -53,6 +54,7 @@ data class Recipe(
         const val TIME_KEY = "time"
         const val LIKES_KEY = "likes"
         const val IMAGE_RES_ID_KEY = "imageResId"
+        const val PHOTO_URL_KEY = "photoURL"
         const val LAST_UPDATED_KEY = "lastUpdated"
 
         fun fromJSON(json: Map<String, Any>): Recipe {
@@ -89,6 +91,7 @@ data class Recipe(
                 is Double -> imgVal.toInt()
                 else -> 0
             }
+            val photoURL = json[PHOTO_URL_KEY] as? String ?: ""
             val timeStamp = json[LAST_UPDATED_KEY] as? Timestamp
             val lastUpdatedLongTimestamp = timeStamp?.toDate()?.time
 
@@ -102,6 +105,7 @@ data class Recipe(
                 time = time,
                 likes = likes,
                 imageResId = imageResId,
+                photoURL = photoURL,
                 lastUpdated = lastUpdatedLongTimestamp,
                 userId = userId,
                 instructions = instructions
@@ -121,6 +125,7 @@ data class Recipe(
             TIME_KEY to time,
             LIKES_KEY to likes,
             IMAGE_RES_ID_KEY to imageResId,
+            PHOTO_URL_KEY to photoURL,
             LAST_UPDATED_KEY to FieldValue.serverTimestamp(),
             INSTRUCTIONS_KEY to instructions,
             USER_ID_KEY to userId,

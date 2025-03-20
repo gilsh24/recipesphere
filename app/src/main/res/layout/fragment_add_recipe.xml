@@ -20,15 +20,24 @@
             app:layout_constraintEnd_toEndOf="parent" />
 
         <ImageView
-            android:id="@+id/ivRecipeImage"
+            android:id="@+id/RecipeImage"
             android:layout_width="0dp"
-            android:layout_height="150dp"
-            android:src="@drawable/add_photo"
-            android:contentDescription="Take a picture of the dish"
-            app:layout_constraintTop_toBottomOf="@id/etRecipeName"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_height="100dp"
+            android:scaleType="fitCenter"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="16dp" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etRecipeName"
+            app:srcCompat="@drawable/recipe_avatar" />
+
+        <ImageButton
+            android:id="@+id/takePhotoButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:src="@drawable/add_photo"
+            app:layout_constraintBottom_toBottomOf="@+id/RecipeImage"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <EditText
             android:id="@+id/etIngredients"
@@ -36,7 +45,7 @@
             android:layout_height="100dp"
             android:hint="Add recipe ingredients..."
             android:inputType="textMultiLine"
-            app:layout_constraintTop_toBottomOf="@id/ivRecipeImage"
+            app:layout_constraintTop_toBottomOf="@id/RecipeImage"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="16dp" />

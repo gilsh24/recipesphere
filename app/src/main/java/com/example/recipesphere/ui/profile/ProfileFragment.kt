@@ -1,5 +1,6 @@
 package com.example.recipesphere.ui.profile
 
+import android.content.Intent
 import androidx.fragment.app.viewModels
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
@@ -11,6 +12,8 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.navigation.Navigation
+import com.example.recipesphere.AuthActivity
+import com.example.recipesphere.MainActivity
 import com.example.recipesphere.databinding.FragmentProfileBinding
 import com.example.recipesphere.model.Model
 import com.example.recipesphere.model.User
@@ -41,6 +44,14 @@ class ProfileFragment : Fragment() {
 
         binding.takePhotoButton.setOnClickListener {
             cameraLauncher?.launch(null)
+        }
+
+        binding.logoutButton.setOnClickListener{
+            Model.shared.signOut()
+            Toast.makeText(requireContext(), "Logged out", Toast.LENGTH_SHORT).show()
+            val intent = Intent(requireContext(), AuthActivity::class.java)
+            startActivity(intent)
+            requireActivity().finish()
         }
 
         return binding.root
@@ -110,7 +121,7 @@ class ProfileFragment : Fragment() {
 
         binding.progressBar.visibility = View.VISIBLE
 
-        Model.shared.update(user, if (didSetProfileImage) (binding.imageView.drawable as BitmapDrawable).bitmap else null) {
+        Model.shared.updateUser(user, if (didSetProfileImage) (binding.imageView.drawable as BitmapDrawable).bitmap else null) {
             binding.progressBar.visibility = View.GONE
             if(didSetProfileImage){
                 didSetProfileImage = false;

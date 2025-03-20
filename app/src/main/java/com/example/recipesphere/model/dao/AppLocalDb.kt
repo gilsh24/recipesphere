@@ -8,7 +8,7 @@ import com.example.recipesphere.base.Converters
 import com.example.recipesphere.base.MyApplication
 import com.example.recipesphere.model.Recipe
 
-@Database(entities = [Recipe::class], version = 4)
+@Database(entities = [Recipe::class], version = 5)
 @TypeConverters(Converters::class)
 abstract class AppLocalDbRepository: RoomDatabase() {
     abstract fun recipeDao(): RecipeDao

@@ -103,18 +103,19 @@ class FirebaseModel {
             .addOnFailureListener { callback(Result.failure(it)) }
     }
 
+
     fun signOut() {
         auth.signOut()
     }
 
-    fun insertRecipe(recipe: Recipe, callback: EmptyCallback) {
+    fun insertRecipe(recipe: Recipe, callback: (Result<Unit>) -> Unit) {
         database.collection(Constants.Collections.RECIPES).document(recipe.id).set(recipe.json)
-            .addOnCompleteListener {
-                callback()
-            }
+            .addOnSuccessListener { callback(Result.success(Unit)) }
             .addOnFailureListener {
                 Log.d("TAG", it.toString() + it.message)
+                callback(Result.failure(it))
             }
+
     }
 
     fun getAllRecipes(sinceLastUpdated: Long, callback: RecipeCallback) {

@@ -15,7 +15,7 @@ interface RecipeDao {
     fun getAllRecipes(): LiveData<List<Recipe>>
 
     @Query("SELECT * FROM Recipe WHERE id =:id")
-    fun getRecipeById(id: String): Recipe
+    fun getRecipeById(id: String): Recipe?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg recipe: Recipe)
