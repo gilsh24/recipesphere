@@ -37,6 +37,13 @@
                 android:name="arg_recipe"
                 app:argType="com.example.recipesphere.model.Recipe" />
         </action>
+        <action
+            android:id="@+id/action_navigation_my_recipes_to_addRecipeFragment"
+            app:destination="@id/navigation_add_recipe">
+            <argument
+                android:name="arg_recipe"
+                app:argType="com.example.recipesphere.model.Recipe" />
+        </action>
     </fragment>
 
     <fragment

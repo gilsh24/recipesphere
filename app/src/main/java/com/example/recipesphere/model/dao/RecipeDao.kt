@@ -25,4 +25,7 @@ interface RecipeDao {
 
     @Query("SELECT * FROM Recipe WHERE userId =:userId")
     fun getRecipesByUserId(userId: String): List<Recipe>
+
+    @Query("DELETE FROM Recipe WHERE id = :recipeId")
+    fun deleteById(recipeId: String)
 }

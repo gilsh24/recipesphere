@@ -1,5 +1,6 @@
 package com.example.recipesphere.ui.general.recipeslist
 
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recipesphere.R
 import com.example.recipesphere.databinding.RecipeListItemBinding
@@ -17,6 +18,15 @@ class RecipeViewHolder(
     init {
         itemView.setOnClickListener {
             listener?.onItemClick(recipe)
+        }
+
+        binding.editbtn.setOnClickListener {
+            listener?.onEditClick(recipe)
+        }
+
+        // Delete button click listener
+        binding.deletebtn.setOnClickListener {
+            listener?.onDeleteClick(recipe)
         }
     }
 
@@ -40,6 +50,9 @@ class RecipeViewHolder(
             } else {
                 binding.imgRecipe.setImageResource(R.drawable.recipe_avatar)
             }
+
+            binding.editbtn.visibility = if (isMyRecipe) View.VISIBLE else View.GONE
+            binding.deletebtn.visibility = if (isMyRecipe) View.VISIBLE else View.GONE
         }
     }
 }
