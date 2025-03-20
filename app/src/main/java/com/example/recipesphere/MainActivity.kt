@@ -8,6 +8,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.recipesphere.databinding.ActivityMainBinding
+import com.example.recipesphere.model.Model
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,5 +33,13 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        Model.shared.loadingState.observe(this) { state ->
+            binding.progressBar.visibility = when (state) {
+                Model.LoadingState.LOADING -> android.view.View.VISIBLE
+                Model.LoadingState.LOADED -> android.view.View.GONE
+                null -> android.view.View.GONE
+            }
+        }
     }
 }

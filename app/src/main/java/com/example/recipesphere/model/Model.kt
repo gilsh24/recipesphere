@@ -35,17 +35,18 @@ class Model {
 
 
     fun getCurrentUserRecipes(callback: RecipeCallback) {
+        loadingState.postValue(LoadingState.LOADING)
         executer.execute {
             val id = FirebaseAuth.getInstance().currentUser?.uid
             if(id == null) {
                 callback(emptyList())
+                loadingState.postValue(LoadingState.LOADED)
             }
             id?.let {
                 val recipes = database.recipeDao().getRecipesByUserId(id)
-                Thread.sleep(3000)
-
                 mainHandler.post {
                     callback(recipes)
+                    loadingState.postValue(LoadingState.LOADED)
                 }
             }
         }
@@ -76,12 +77,14 @@ class Model {
     }
 
     fun updateUser(user: User, image: Bitmap?, callback: EmptyCallback) {
+        loadingState.postValue(LoadingState.LOADING)
         firebaseModel.updateUser(user.uid, user.toMap()) {
             image?.let {
                 cloudinaryModel.uploadImage(it, user.email, onSuccess = { uri ->
                     if (!uri.isNullOrBlank()) {
                         val updatedUser = user.copy(photoURL = uri)
                         firebaseModel.updateUser(updatedUser.uid, updatedUser.toMap()) { updateResult ->
+                            loadingState.postValue(LoadingState.LOADED)
                             if (updateResult.isSuccess) {
                                 callback()
                             } else {
@@ -89,10 +92,14 @@ class Model {
                             }
                         }
                     } else {
+                        loadingState.postValue(LoadingState.LOADED)
                         callback()
                     }
                 }, onError = { callback() })
-            } ?: callback()
+            } ?:  run {
+                loadingState.postValue(LoadingState.LOADED)
+                callback()
+            }
         }
     }
 
@@ -101,12 +108,14 @@ class Model {
     }
 
     fun addRecipe(recipe: Recipe, image: Bitmap?, callback: EmptyCallback) {
+        loadingState.postValue(LoadingState.LOADING)
         firebaseModel.insertRecipe(recipe) {
             image?.let {
                 cloudinaryModel.uploadImage(it, recipe.id, onSuccess = { uri ->
                     if (!uri.isNullOrBlank()) {
                         val updatedRecipe = recipe.copy(photoURL = uri)
                         firebaseModel.insertRecipe(updatedRecipe) { updateResult ->
+                            loadingState.postValue(LoadingState.LOADED)
                             if (updateResult.isSuccess) {
                                 callback()
                             } else {
@@ -114,14 +123,22 @@ class Model {
                             }
                         }
                     } else {
+                        loadingState.postValue(LoadingState.LOADED)
                         callback()
                     }
-                }, onError = { callback() })
-            } ?: callback()
+                }, onError = {
+                    loadingState.postValue(LoadingState.LOADED)
+                    callback()
+                })
+            } ?: run {
+                loadingState.postValue(LoadingState.LOADED)
+                callback()
+            }
         }
     }
 
     fun updateRecipe(recipe: Recipe, image: Bitmap?, callback: EmptyCallback) {
+        loadingState.postValue(LoadingState.LOADING)
         firebaseModel.insertRecipe(recipe) { result ->
             if (result.isSuccess) {
                 image?.let {
@@ -129,47 +146,61 @@ class Model {
                         if (!uri.isNullOrBlank()) {
                             val updatedRecipe = recipe.copy(photoURL = uri)
                             firebaseModel.insertRecipe(updatedRecipe) { updateResult ->
+                                loadingState.postValue(LoadingState.LOADED)
                                 if (updateResult.isSuccess) {
                                     executer.execute {
                                         database.recipeDao().insertAll(updatedRecipe)
                                         mainHandler.post { callback() }
                                     }
                                 } else {
+                                    loadingState.postValue(LoadingState.LOADED)
                                     callback()
                                 }
                             }
                         } else {
+                            loadingState.postValue(LoadingState.LOADED)
                             callback()
                         }
-                    }, onError = { callback() })
+                    }, onError = {
+                        loadingState.postValue(LoadingState.LOADED)
+                        callback()
+                    })
                 } ?: run {
                     executer.execute {
                         database.recipeDao().insertAll(recipe)
-                        mainHandler.post { callback() }
+                        mainHandler.post {
+                            loadingState.postValue(LoadingState.LOADED)
+                            callback()
+                        }
                     }
                 }
             } else {
+                loadingState.postValue(LoadingState.LOADED)
                 callback()
             }
         }
     }
 
     fun deleteRecipe(recipeId: String, callback: EmptyCallback) {
+        loadingState.postValue(LoadingState.LOADING)
         firebaseModel.deleteRecipe(recipeId) { result ->
             if (result.isSuccess) {
                 executer.execute {
                     try {
                         database.recipeDao().deleteById(recipeId)
                         mainHandler.post {
+                            loadingState.postValue(LoadingState.LOADED)
                             callback()
                         }
                     } catch (e: Exception) {
                         mainHandler.post {
+                            loadingState.postValue(LoadingState.LOADED)
                             callback()
                         }
                     }
                 }
             } else {
+                loadingState.postValue(LoadingState.LOADED)
                 callback()
             }
         }

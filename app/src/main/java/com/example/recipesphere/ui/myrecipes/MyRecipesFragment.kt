@@ -92,9 +92,6 @@ class MyRecipesFragment : Fragment() {
     }
 
     private fun getMyRecipes() {
-//        binding?.progressBar?.visibility = View.VISIBLE
-//        viewModel.refreshAllStudents()
-
         Model.shared.getCurrentUserRecipes  {
             recipes = it
             adapter.update(it)
