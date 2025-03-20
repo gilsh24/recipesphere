@@ -25,7 +25,7 @@ class RecipesRecyclerAdapter(
             parent,
             false
         )
-        return RecipeViewHolder(binding,isMyRecipe, listener)
+        return RecipeViewHolder(binding, isMyRecipe, listener)
     }
 
     override fun onBindViewHolder(holder: RecipeViewHolder, position: Int) {

@@ -49,6 +49,10 @@ class BrowseRecipesFragment : Fragment() {
                     findNavController().navigate(action)
                 }
             }
+
+            override fun onEditClick(recipe: Recipe?) {}
+
+            override fun onDeleteClick(recipe: Recipe?) {}
         }
         binding.rvRecipes.adapter = adapter
     }

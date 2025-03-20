@@ -1,5 +1,6 @@
 package com.example.recipesphere.ui.myrecipes
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,9 @@ import com.example.recipesphere.model.Model
 import com.example.recipesphere.model.Recipe
 import com.example.recipesphere.ui.general.recipeslist.OnItemClickListener
 import com.example.recipesphere.ui.general.recipeslist.RecipesRecyclerAdapter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MyRecipesFragment : Fragment() {
 
@@ -46,6 +50,30 @@ class MyRecipesFragment : Fragment() {
                 recipe?.let {
                     val action = MyRecipesFragmentDirections.actionNavigationMyRecipesToSingleRecipeFragment(it)
                     findNavController().navigate(action)
+                }
+            }
+
+            override fun onEditClick(recipe: Recipe?) {
+                recipe?.let {
+                    val action = MyRecipesFragmentDirections.actionNavigationMyRecipesToAddRecipeFragment(it)
+                    findNavController().navigate(action)
+                }
+            }
+
+            override fun onDeleteClick(recipe: Recipe?) {
+                recipe?.let {
+                    AlertDialog.Builder(requireContext())
+                        .setTitle("Delete Recipe")
+                        .setMessage("Are you sure you want to delete ${recipe.title}?")
+                        .setPositiveButton("Yes") { _, _ ->
+                            CoroutineScope(Dispatchers.Main).launch {
+                                Model.shared.deleteRecipe(recipe.id) {
+                                    getMyRecipes()
+                                }
+                            }
+                        }
+                        .setNegativeButton("No", null)
+                        .show()
                 }
             }
         }

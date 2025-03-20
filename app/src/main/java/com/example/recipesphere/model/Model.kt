@@ -121,6 +121,60 @@ class Model {
         }
     }
 
+    fun updateRecipe(recipe: Recipe, image: Bitmap?, callback: EmptyCallback) {
+        firebaseModel.insertRecipe(recipe) { result ->
+            if (result.isSuccess) {
+                image?.let {
+                    cloudinaryModel.uploadImage(it, recipe.id, onSuccess = { uri ->
+                        if (!uri.isNullOrBlank()) {
+                            val updatedRecipe = recipe.copy(photoURL = uri)
+                            firebaseModel.insertRecipe(updatedRecipe) { updateResult ->
+                                if (updateResult.isSuccess) {
+                                    executer.execute {
+                                        database.recipeDao().insertAll(updatedRecipe)
+                                        mainHandler.post { callback() }
+                                    }
+                                } else {
+                                    callback()
+                                }
+                            }
+                        } else {
+                            callback()
+                        }
+                    }, onError = { callback() })
+                } ?: run {
+                    executer.execute {
+                        database.recipeDao().insertAll(recipe)
+                        mainHandler.post { callback() }
+                    }
+                }
+            } else {
+                callback()
+            }
+        }
+    }
+
+    fun deleteRecipe(recipeId: String, callback: EmptyCallback) {
+        firebaseModel.deleteRecipe(recipeId) { result ->
+            if (result.isSuccess) {
+                executer.execute {
+                    try {
+                        database.recipeDao().deleteById(recipeId)
+                        mainHandler.post {
+                            callback()
+                        }
+                    } catch (e: Exception) {
+                        mainHandler.post {
+                            callback()
+                        }
+                    }
+                }
+            } else {
+                callback()
+            }
+        }
+    }
+
     fun refreshAllRecipes() {
         loadingState.postValue(LoadingState.LOADING)
         val lastUpdated: Long = Recipe.lastUpdated

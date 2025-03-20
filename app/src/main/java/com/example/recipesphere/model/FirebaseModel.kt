@@ -117,6 +117,19 @@ class FirebaseModel {
 
     }
 
+    fun deleteRecipe(recipeId: String, callback: (Result<Unit>) -> Unit) {
+        database.collection(Constants.Collections.RECIPES)
+            .document(recipeId)
+            .delete()
+            .addOnSuccessListener {
+                callback(Result.success(Unit))
+            }
+            .addOnFailureListener { e ->
+                Log.d("TAG", "Error deleting recipe: ${e.message}", e)
+                callback(Result.failure(e))
+            }
+    }
+
     fun getAllRecipes(sinceLastUpdated: Long, callback: RecipeCallback) {
         database.collection(Constants.Collections.RECIPES)
             .whereGreaterThanOrEqualTo(Recipe.LAST_UPDATED_KEY, sinceLastUpdated.toFirebaseTimestamp)
