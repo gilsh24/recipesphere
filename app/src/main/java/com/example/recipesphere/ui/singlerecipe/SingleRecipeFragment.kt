@@ -62,7 +62,7 @@ class SingleRecipeFragment : Fragment() {
             binding.tvDifficulty.text = "Difficulty ${recipe.difficultyLevel}/5"
             binding.tvCalories.text = String.format(recipe.calories.toString())
             binding.tvDietLabel.text = listToCommaSeparatedString(recipe.dietLabels)
-            binding.tvHealthLabel.text = listToCommaSeparatedString(recipe.healthLabels.subList(0,4))
+            binding.tvHealthLabel.text = listToCommaSeparatedString(recipe.healthLabels)
             binding.tvCuisineType.text = listToCommaSeparatedString(recipe.cuisineType)
             binding.tvMealType.text = listToCommaSeparatedString(recipe.mealType)
             binding.tvIngredients.text = recipe.ingredients.joinToString(", ")
