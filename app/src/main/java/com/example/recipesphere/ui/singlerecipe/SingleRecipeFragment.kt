@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.recipesphere.databinding.FragmentSingleRecipeBinding
 import com.example.recipesphere.model.Recipe
 import com.squareup.picasso.Picasso
+import com.example.recipesphere.extensions.listToCommaSeparatedString
 
 class SingleRecipeFragment : Fragment() {
 
@@ -59,12 +60,11 @@ class SingleRecipeFragment : Fragment() {
             binding.tvRecipeTitle.text = recipe.title
             binding.tvTime.text = recipe.time
             binding.tvDifficulty.text = "Difficulty ${recipe.difficultyLevel}/5"
-            // Placeholder fields (to be updated later)
             binding.tvCalories.text = String.format(recipe.calories.toString())
-            binding.tvDietLabel.text = recipe.dietLabels.toString()
-            binding.tvHealthLabel.text = recipe.healthLabels.toString()
-            binding.tvCuisineType.text = recipe.cuisineType.toString()
-            binding.tvMealType.text = recipe.mealType.toString()
+            binding.tvDietLabel.text = listToCommaSeparatedString(recipe.dietLabels)
+            binding.tvHealthLabel.text = listToCommaSeparatedString(recipe.healthLabels.subList(0,4))
+            binding.tvCuisineType.text = listToCommaSeparatedString(recipe.cuisineType)
+            binding.tvMealType.text = listToCommaSeparatedString(recipe.mealType)
             binding.tvIngredients.text = recipe.ingredients.joinToString(", ")
             binding.tvInstructions.text = recipe.instructions
         } ?: run {
