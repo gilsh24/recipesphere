@@ -32,25 +32,6 @@ class Model {
         val shared = Model()
     }
 
-    fun insertRecipe(recipe: Recipe, image: Bitmap?, callback: EmptyCallback) {
-        firebaseModel.insertRecipe(recipe) {
-            callback()
-//            image?.let {
-//                uploadTo(
-//                    image = image,
-//                    name = student.id,
-//                    callback = { uri ->
-//                        if (!uri.isNullOrBlank()) {
-//                            val st = recipe.copy(imageResId = uri)
-//                            firebaseModel.insertRecipe(st, callback)
-//                        } else {
-//                            callback()
-//                        }
-//                    },
-//                )
-//            } ?: callback()
-        }
-    }
 
     // remember to change get by user id not by recipeId
     fun getUserRecipes(id: String, callback: RecipeCallback) {
