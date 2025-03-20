@@ -71,23 +71,35 @@ class AddRecipeFragment : Fragment() {
         viewModel.user.observe(viewLifecycleOwner){ currUser ->
             if (currUser != null){
                 val userName = "${currUser.firstName} ${currUser.lastName}"
-                val recipe = Recipe(
-                    id = Random.nextInt(1, 1001).toString(),
-                    title = binding.etRecipeName.text.toString(),
-                    ingredients = binding.etIngredients.text.toString().split(",").map { it.trim() },
-                    instructions = binding.etInstructions.text.toString(),
-                    time = binding.etPreparationTime.text.toString(),
-                    difficultyLevel = binding.etDifficultyLevel.text.toString().toIntOrNull() ?: 1,
-                    userId = currUser.uid,
-                    userName = userName ,
-                    userAge = currUser.age,
-                    likes = 0,
-                    imageResId = 123
-                )
-                Model.shared.addRecipe(recipe, if (didSetProfileImage) (binding.RecipeImage.drawable as BitmapDrawable).bitmap else null) {
-                    Toast.makeText(requireContext(), "Recipe added!", Toast.LENGTH_SHORT).show()
-                    findNavController().popBackStack()
+                val ingredients = binding.etIngredients.text.toString().split(",").map { it.trim() }
+                Model.shared.getNutritionData(ingredients){ edamamResponse ->
+                    if (edamamResponse != null){
+                        val recipe = Recipe(
+                            id = Random.nextInt(1, 1001).toString(),
+                            title = binding.etRecipeName.text.toString(),
+                            ingredients = binding.etIngredients.text.toString().split(",").map { it.trim() },
+                            instructions = binding.etInstructions.text.toString(),
+                            time = binding.etPreparationTime.text.toString(),
+                            difficultyLevel = binding.etDifficultyLevel.text.toString().toIntOrNull() ?: 1,
+                            userId = currUser.uid,
+                            userName = userName ,
+                            userAge = currUser.age,
+                            likes = 0,
+                            imageResId = 123,
+                            calories = edamamResponse.calories,
+                            dietLabels = edamamResponse.dietLabels,
+                            healthLabels = edamamResponse.healthLabels,
+                            cautions = edamamResponse.cautions,
+                            mealType = edamamResponse.mealType,
+                            cuisineType = edamamResponse.cuisineType
+                        )
+                        Model.shared.addRecipe(recipe, if (didSetProfileImage) (binding.RecipeImage.drawable as BitmapDrawable).bitmap else null) {
+                            Toast.makeText(requireContext(), "Recipe added!", Toast.LENGTH_SHORT).show()
+                            findNavController().popBackStack()
+                        }
+                    }
                 }
+
             } else{
                 Toast.makeText(requireContext(), "User data not found", Toast.LENGTH_SHORT).show()
             }

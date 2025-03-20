@@ -27,7 +27,18 @@ data class Recipe(
     val likes: Int,
     val imageResId: Int,
     val photoURL: String = "",
-    val lastUpdated: Long? = null
+    val lastUpdated: Long? = null,
+    val calories: Double = 0.0,
+    @TypeConverters(Converters::class)
+    val dietLabels: List<String> = emptyList(),
+    @TypeConverters(Converters::class)
+    val healthLabels: List<String> = emptyList(),
+    @TypeConverters(Converters::class)
+    val cautions: List<String> = emptyList(),
+    @TypeConverters(Converters::class)
+    val mealType: List<String>? = null,
+    @TypeConverters(Converters::class)
+    val cuisineType: List<String>? = null
 ) : Parcelable {
     companion object {
         const val LOCAL_LAST_UPDATED = "localRecipeLastUpdated"
@@ -56,6 +67,12 @@ data class Recipe(
         const val IMAGE_RES_ID_KEY = "imageResId"
         const val PHOTO_URL_KEY = "photoURL"
         const val LAST_UPDATED_KEY = "lastUpdated"
+        const val CALORIES_KEY = "calories"
+        const val DIET_LABELS_KEY = "dietLabels"
+        const val HEALTH_LABELS_KEY = "healthLabels"
+        const val CAUTIONS_KEY = "cautions"
+        const val MEAL_TYPE_KEY = "mealType"
+        const val CUISINE_TYPE_KEY = "cuisineType"
 
         fun fromJSON(json: Map<String, Any>): Recipe {
             val id = json[ID_KEY] as? String ?: ""
@@ -94,6 +111,13 @@ data class Recipe(
             val photoURL = json[PHOTO_URL_KEY] as? String ?: ""
             val timeStamp = json[LAST_UPDATED_KEY] as? Timestamp
             val lastUpdatedLongTimestamp = timeStamp?.toDate()?.time
+            val calories = (json[CALORIES_KEY] as? Number)?.toDouble() ?: 0.0
+            val dietLabels = (json[DIET_LABELS_KEY] as? List<*>)?.map { it.toString() } ?: emptyList()
+            val healthLabels = (json[HEALTH_LABELS_KEY] as? List<*>)?.map { it.toString() } ?: emptyList()
+            val cautions = (json[CAUTIONS_KEY] as? List<*>)?.map { it.toString() } ?: emptyList()
+            val mealType = (json[MEAL_TYPE_KEY] as? List<*>)?.map { it.toString() }
+            val cuisineType = (json[CUISINE_TYPE_KEY] as? List<*>)?.map { it.toString() }
+
 
             return Recipe(
                 id = id,
@@ -108,7 +132,13 @@ data class Recipe(
                 photoURL = photoURL,
                 lastUpdated = lastUpdatedLongTimestamp,
                 userId = userId,
-                instructions = instructions
+                instructions = instructions,
+                calories = calories,
+                dietLabels = dietLabels,
+                healthLabels = healthLabels,
+                cautions = cautions,
+                mealType = mealType,
+                cuisineType = cuisineType
             )
         }
 
@@ -129,6 +159,12 @@ data class Recipe(
             LAST_UPDATED_KEY to FieldValue.serverTimestamp(),
             INSTRUCTIONS_KEY to instructions,
             USER_ID_KEY to userId,
+            CALORIES_KEY to calories,
+            DIET_LABELS_KEY to dietLabels,
+            HEALTH_LABELS_KEY to healthLabels,
+            CAUTIONS_KEY to cautions,
+            MEAL_TYPE_KEY to (mealType ?: emptyList<String>()),
+            CUISINE_TYPE_KEY to (cuisineType ?: emptyList<String>())
         )
 
 }

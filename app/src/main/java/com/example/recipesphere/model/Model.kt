@@ -25,6 +25,7 @@ class Model {
     private var mainHandler = HandlerCompat.createAsync(Looper.getMainLooper())
     private val firebaseModel = FirebaseModel()
     private val cloudinaryModel = CloudinaryModel()
+    private val edamamModel = EdamamModel()
     val recipes: LiveData<List<Recipe>> = database.recipeDao().getAllRecipes()
     val loadingState: MutableLiveData<LoadingState> = MutableLiveData<LoadingState>()
 
@@ -134,6 +135,16 @@ class Model {
 
                 Recipe.lastUpdated = currentTime
                 loadingState.postValue(LoadingState.LOADED)
+            }
+        }
+    }
+
+    fun getNutritionData(ingredients: List<String>, callback: (EdamamResponse?) -> Unit) {
+        executer.execute {
+            edamamModel.getNutritionFacts(ingredients) { response ->
+                mainHandler.post {
+                    callback(response)
+                }
             }
         }
     }

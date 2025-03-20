@@ -31,6 +31,8 @@ android {
         buildConfigField("String", "CLOUD_NAME", "\"${localProperties.getProperty("cloudinary_cloud_name", "")}\"")
         buildConfigField("String", "API_KEY", "\"${localProperties.getProperty("cloudinary_api_key", "")}\"")
         buildConfigField("String", "API_SECRET", "\"${localProperties.getProperty("cloudinary_api_secret", "")}\"")
+        buildConfigField("String", "EDAMAM_APP_ID", "\"${localProperties.getProperty("edamam_app_id", "")}\"")
+        buildConfigField("String", "EDAMAM_APP_KEY", "\"${localProperties.getProperty("edamam_app_key", "")}\"")
     }
 
     buildTypes {
@@ -65,6 +67,9 @@ dependencies {
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.auth)
     implementation(libs.cloudinary.android)
+    implementation(libs.retrofit)
+    implementation(libs.converterGson)
+    implementation(libs.loggingInterceptor)
     implementation(libs.picasso)
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
