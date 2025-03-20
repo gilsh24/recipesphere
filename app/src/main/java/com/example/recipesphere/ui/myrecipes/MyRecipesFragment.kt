@@ -67,10 +67,10 @@ class MyRecipesFragment : Fragment() {
 //        binding?.progressBar?.visibility = View.VISIBLE
 //        viewModel.refreshAllStudents()
 
-        Model.shared.getUserRecipes("3", {
+        Model.shared.getCurrentUserRecipes  {
             recipes = it
             adapter.update(it)
             adapter.notifyDataSetChanged()
-        })
+        }
     }
 }
