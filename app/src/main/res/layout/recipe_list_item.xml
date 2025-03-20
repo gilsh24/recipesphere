@@ -9,7 +9,6 @@
     android:background="@android:color/white"
     android:padding="8dp">
 
-    <!-- Recipe Image -->
     <ImageView
         android:id="@+id/imgRecipe"
         android:layout_width="80dp"
@@ -20,7 +19,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_margin="8dp"/>
 
-    <!-- Name and age badge -->
     <TextView
         android:id="@+id/tvNameAge"
         android:layout_width="wrap_content"
@@ -33,7 +31,6 @@
         app:layout_constraintLeft_toRightOf="@+id/imgRecipe"
         android:layout_marginStart="12dp"/>
 
-    <!-- Recipe title -->
     <TextView
         android:id="@+id/tvRecipeTitle"
         android:layout_width="wrap_content"
@@ -46,21 +43,6 @@
         app:layout_constraintLeft_toLeftOf="@+id/tvNameAge"
         android:layout_marginTop="4dp"/>
 
-    <!-- Short description -->
-    <TextView
-        android:id="@+id/tvDescription"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="This is a recipe for super fluffy pancakes"
-        android:textSize="14sp"
-        android:textColor="@android:color/black"
-        app:layout_constraintTop_toBottomOf="@+id/tvRecipeTitle"
-        app:layout_constraintLeft_toLeftOf="@+id/tvRecipeTitle"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="8dp"/>
-
-    <!-- Ingredients snippet -->
     <TextView
         android:id="@+id/tvIngredients"
         android:layout_width="0dp"
@@ -68,20 +50,21 @@
         android:text="ingredients: Flour, Milk, Butter..."
         android:textSize="13sp"
         android:textColor="@android:color/black"
-        app:layout_constraintTop_toBottomOf="@+id/tvDescription"
-        app:layout_constraintLeft_toLeftOf="@+id/tvDescription"
-        app:layout_constraintRight_toRightOf="@+id/tvDescription"
+        app:layout_constraintTop_toBottomOf="@+id/tvRecipeTitle"
+        app:layout_constraintLeft_toLeftOf="@+id/tvRecipeTitle"
+        app:layout_constraintRight_toRightOf="parent"
         android:layout_marginTop="2dp"/>
 
-    <!-- Time icon & text -->
     <ImageView
         android:id="@+id/imgTimeIcon"
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:src="@android:drawable/ic_menu_recent_history"
-        app:layout_constraintTop_toBottomOf="@+id/tvIngredients"
         app:layout_constraintLeft_toLeftOf="@+id/tvIngredients"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintTop_toTopOf="@+id/tvTime"/>
 
     <TextView
         android:id="@+id/tvTime"
@@ -90,31 +73,8 @@
         android:text="25 minutes"
         android:textSize="13sp"
         android:textColor="@android:color/black"
-        app:layout_constraintBaseline_toBaselineOf="@+id/imgTimeIcon"
         app:layout_constraintLeft_toRightOf="@+id/imgTimeIcon"
-        android:layout_marginStart="4dp"/>
-
-    <!-- Likes icon & text -->
-    <ImageView
-        android:id="@+id/imgLikesIcon"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:src="@drawable/ic_home_black_24dp"
-        app:layout_constraintTop_toBottomOf="@+id/tvIngredients"
-        app:layout_constraintLeft_toRightOf="@+id/tvTime"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/imgTimeIcon"/>
-
-    <TextView
-        android:id="@+id/tvLikes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="100"
-        android:textSize="13sp"
-        android:textColor="@android:color/black"
-        app:layout_constraintBaseline_toBaselineOf="@+id/imgLikesIcon"
-        app:layout_constraintLeft_toRightOf="@+id/imgLikesIcon"
-        android:layout_marginStart="4dp"/>
+        android:layout_marginStart="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

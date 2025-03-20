@@ -24,8 +24,6 @@ data class Recipe(
     @TypeConverters(Converters::class)
     val ingredients: List<String>,  // List of ingredients
     val time: String,
-    val likes: Int,
-    val imageResId: Int,
     val photoURL: String = "",
     val lastUpdated: Long? = null,
     val calories: Double = 0.0,
@@ -63,8 +61,6 @@ data class Recipe(
         const val DIFFICULTY_LEVEL_KEY = "difficultyLevel"
         const val INGREDIENTS_KEY = "ingredients"
         const val TIME_KEY = "time"
-        const val LIKES_KEY = "likes"
-        const val IMAGE_RES_ID_KEY = "imageResId"
         const val PHOTO_URL_KEY = "photoURL"
         const val LAST_UPDATED_KEY = "lastUpdated"
         const val CALORIES_KEY = "calories"
@@ -96,18 +92,6 @@ data class Recipe(
             // Ensure that each ingredient is a String
             val ingredientsList = ingredients.map { it.toString() }
             val time = json[TIME_KEY] as? String ?: ""
-            val likes = when(val likesVal = json[LIKES_KEY]) {
-                is Long -> likesVal.toInt()
-                is Int -> likesVal
-                is Double -> likesVal.toInt()
-                else -> 0
-            }
-            val imageResId = when(val imgVal = json[IMAGE_RES_ID_KEY]) {
-                is Long -> imgVal.toInt()
-                is Int -> imgVal
-                is Double -> imgVal.toInt()
-                else -> 0
-            }
             val photoURL = json[PHOTO_URL_KEY] as? String ?: ""
             val timeStamp = json[LAST_UPDATED_KEY] as? Timestamp
             val lastUpdatedLongTimestamp = timeStamp?.toDate()?.time
@@ -127,8 +111,6 @@ data class Recipe(
                 difficultyLevel = difficultyLevel,
                 ingredients = ingredientsList,
                 time = time,
-                likes = likes,
-                imageResId = imageResId,
                 photoURL = photoURL,
                 lastUpdated = lastUpdatedLongTimestamp,
                 userId = userId,
@@ -153,8 +135,6 @@ data class Recipe(
             DIFFICULTY_LEVEL_KEY to difficultyLevel,
             INGREDIENTS_KEY to ingredients,
             TIME_KEY to time,
-            LIKES_KEY to likes,
-            IMAGE_RES_ID_KEY to imageResId,
             PHOTO_URL_KEY to photoURL,
             LAST_UPDATED_KEY to FieldValue.serverTimestamp(),
             INSTRUCTIONS_KEY to instructions,

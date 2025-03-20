@@ -1,8 +1,10 @@
 package com.example.recipesphere.ui.general.recipeslist
 
 import androidx.recyclerview.widget.RecyclerView
+import com.example.recipesphere.R
 import com.example.recipesphere.databinding.RecipeListItemBinding
 import com.example.recipesphere.model.Recipe
+import com.squareup.picasso.Picasso
 
 class RecipeViewHolder(
     private val binding: RecipeListItemBinding,
@@ -21,13 +23,23 @@ class RecipeViewHolder(
     fun bind(recipe: Recipe?) {
         recipe?.let {
             this.recipe = recipe
-//            binding.imgRecipe.setImageResource(it.imageResId)
             binding.tvNameAge.text = "${recipe.userName}, ${recipe.userAge}"
-            binding.tvRecipeTitle.text = recipe.title
-            binding.tvDescription.text = "bla"
-            binding.tvIngredients.text = "Ingredients: ${recipe.ingredients.joinToString(", ")}"
-            binding.tvTime.text = recipe.time
-            binding.tvLikes.text = recipe.likes.toString()
+            binding.tvRecipeTitle.text = "Recipe: ${recipe.title}"
+            val ingredientsText = "Ingredients: ${recipe.ingredients.joinToString(", ")}"
+            if (ingredientsText.length > 25) {
+                binding.tvIngredients.text = ingredientsText.substring(0, 25) + "..."
+            } else {
+                binding.tvIngredients.text = ingredientsText
+            }
+            binding.tvTime.text = "${recipe.time} Minutes"
+            if (recipe.photoURL.isNotEmpty()) {
+                Picasso.get()
+                    .load(recipe.photoURL)
+                    .placeholder(R.drawable.recipe_avatar)
+                    .into(binding.imgRecipe)
+            } else {
+                binding.imgRecipe.setImageResource(R.drawable.recipe_avatar)
+            }
         }
     }
 }
