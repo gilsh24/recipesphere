@@ -55,17 +55,6 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="8dp" />
 
-    <!-- Likes -->
-    <TextView
-        android:id="@+id/tvLikes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="100"
-        android:textSize="14sp"
-        app:layout_constraintTop_toBottomOf="@id/tvTime"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="4dp" />
-
     <!-- Difficulty Level -->
     <TextView
         android:id="@+id/tvDifficulty"
@@ -73,7 +62,7 @@
         android:layout_height="wrap_content"
         android:text="Difficulty 3/5"
         android:textSize="14sp"
-        app:layout_constraintTop_toBottomOf="@id/tvLikes"
+        app:layout_constraintTop_toBottomOf="@id/tvTime"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="4dp" />
 

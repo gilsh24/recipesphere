@@ -84,8 +84,6 @@ class AddRecipeFragment : Fragment() {
                             userId = currUser.uid,
                             userName = userName ,
                             userAge = currUser.age,
-                            likes = 0,
-                            imageResId = 123,
                             calories = edamamResponse.calories,
                             dietLabels = edamamResponse.dietLabels,
                             healthLabels = edamamResponse.healthLabels,

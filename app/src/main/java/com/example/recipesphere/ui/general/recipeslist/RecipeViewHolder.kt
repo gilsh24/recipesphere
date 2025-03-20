@@ -3,6 +3,7 @@ package com.example.recipesphere.ui.general.recipeslist
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recipesphere.databinding.RecipeListItemBinding
 import com.example.recipesphere.model.Recipe
+import com.squareup.picasso.Picasso
 
 class RecipeViewHolder(
     private val binding: RecipeListItemBinding,
@@ -21,13 +22,17 @@ class RecipeViewHolder(
     fun bind(recipe: Recipe?) {
         recipe?.let {
             this.recipe = recipe
-//            binding.imgRecipe.setImageResource(it.imageResId)
             binding.tvNameAge.text = "${recipe.userName}, ${recipe.userAge}"
-            binding.tvRecipeTitle.text = recipe.title
-            binding.tvDescription.text = "bla"
+            binding.tvRecipeTitle.text = "Title: ${recipe.title}"
             binding.tvIngredients.text = "Ingredients: ${recipe.ingredients.joinToString(", ")}"
             binding.tvTime.text = recipe.time
-            binding.tvLikes.text = recipe.likes.toString()
+            if (recipe.photoURL.isNotEmpty()) {
+                Picasso.get()
+                    .load(recipe.photoURL)
+                    .into(binding.imgRecipe)
+            } else {
+                binding.imgRecipe.setImageResource(com.example.recipesphere.R.drawable.recipe_avatar)
+            }
         }
     }
 }

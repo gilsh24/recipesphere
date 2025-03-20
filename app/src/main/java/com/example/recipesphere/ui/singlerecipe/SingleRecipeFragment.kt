@@ -58,7 +58,6 @@ class SingleRecipeFragment : Fragment() {
             binding.tvUserDetails.text = "${recipe.userName}, ${recipe.userAge}"
             binding.tvRecipeTitle.text = recipe.title
             binding.tvTime.text = recipe.time
-            binding.tvLikes.text = String.format(recipe.likes.toString())
             binding.tvDifficulty.text = "Difficulty ${recipe.difficultyLevel}/5"
             // Placeholder fields (to be updated later)
             binding.tvCalories.text = String.format(recipe.calories.toString())
